@@ -72,7 +72,6 @@ class LottoStore extends Component {
             })
         }).done(()=>{
             if (self.state.totalCount == createCount) {
-                self.props.loadLottoList();
                 self.props.activeNextStep();
             }
         });
@@ -85,15 +84,21 @@ class LottoStore extends Component {
                     <h2 className="text-center">로또 게임</h2>
                     <div className="input-group">
                         <div className="input-group-addon">￦</div>
-                        <LottoCashier updateTotalCount={this.updateTotalCount} max={10000} unit={1000} />
+                        <LottoCashier max={10000} unit={1000}
+                                      updateTotalCount={this.updateTotalCount}
+                        />
                     </div>
                 </div>
                 <div>
                     <div className="form-show-div margin-bottom">
-                        <LottoGenerator addLotto={this.addLotto} disabled={this.state.totalCount - this.state.manualLottoList.length == 0}/>
+                        <LottoGenerator disabled={this.state.totalCount - this.state.manualLottoList.length == 0}
+                                        addLotto={this.addLotto}
+                        />
                     </div>
                     <div className="form-show-div margin-bottom">
-                        <LottoPurchaseStatus count={this.state.totalCount} lottoList={this.state.manualLottoList} onDeleteLotto={this.onDeleteLotto}/>
+                        <LottoPurchaseStatus count={this.state.totalCount} lottoList={this.state.manualLottoList}
+                                             onDeleteLotto={this.onDeleteLotto}
+                        />
                     </div>
                 </div>
                 <div className="submit-button">

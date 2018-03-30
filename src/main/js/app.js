@@ -17,6 +17,7 @@ const when = require('when');
 const root = "/api";
 
 const MAX_PAGE_SIZE = 10;
+const SPLIT_SYMBOL = ",";
 
 class App extends React.Component {
 
@@ -113,8 +114,8 @@ class App extends React.Component {
         }).done(wlottoes => {
             if(!wlottoes.length) return;
             this.setState({
-                winningNumber: wlottoes[wlottoes.length-1].entity.lotto.map(number=>number.number),
-                bonusNumber: wlottoes[wlottoes.length-1].entity.luckyNumber.number,
+                winningNumber: wlottoes[wlottoes.length-1].entity.lotto.map(number=>number.number).join(SPLIT_SYMBOL),
+                bonusNumber: wlottoes[wlottoes.length-1].entity.luckyNumber.number.toString(),
                 attributes: Object.keys(this.schema.properties),
                 pageSize: pageSize,
                 links: this.links
@@ -166,6 +167,7 @@ class App extends React.Component {
                                 {...props}
                                 root={root}
                                 nextStep="result"
+                                splitSymbol={SPLIT_SYMBOL}
                                 lottoList={this.state.lottoList}
                                 winningNumber={this.state.winningNumber}
                                 bonusNumber={this.state.bonusNumber}

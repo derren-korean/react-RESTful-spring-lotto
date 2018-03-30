@@ -12,8 +12,8 @@ class LottoListPrinter extends Component {
                 <tbody>
                 {this.props.lottoList.map((lotto, index) =>
                     <LottoTrPrinter key={lotto.toString()+index}
-                                  lotto={lotto}
-                                  index={index}
+                                    lotto={lotto}
+                                    index={index}
                     />
                 )}
                 </tbody>

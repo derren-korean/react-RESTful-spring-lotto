@@ -20,7 +20,7 @@ class LottoPurchasePrinter extends Component {
                 </tr>
                 {this.props.list.map((number, index) =>
                     <tr key={number.toString()+index}>
-                        <td>{number}</td><td className="text-center delete-div" index={index} onClick={this.onDeleteLotto}>X</td>
+                        <td>{number}</td><td onClick={this.onDeleteLotto} className="text-center delete-div" index={index}>X</td>
                     </tr>
                 )}
                 </tbody>

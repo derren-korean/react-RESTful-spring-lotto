@@ -5,8 +5,6 @@ import BonusNumberMachine from "./BonusNumberMachine";
 const client = require('../client');
 const follow = require('../follow');
 
-const SPLIT_SYMBOL = ",";
-
 class WinningLottoGenerator extends Component {
 
     constructor(props) {
@@ -36,24 +34,23 @@ class WinningLottoGenerator extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        let winnigLotto = {lotto: this.toLottoArray(this.state.winningNumber), luckyNumber: {number: this.state.bonusNumber}};
+        let winningLotto = {lotto: this.toLottoArray(this.state.winningNumber), luckyNumber: {number: this.state.bonusNumber}};
         if (this.state.winningNumber.length == 0) {
             if (!confirm("당첨 번호를 입력하지 않으면 자동으로 입력됩니다. 진행하시겠습니까?")) {
                 return;
             }
-            winnigLotto = {};
+            winningLotto = {};
         }
         if (this.state.winningNumber.length && this.state.bonusNumber.length == 0) {
             alert("행운 번호를 입력해주세요.");
             return;
         }
-        this.submitWinningLotto(winnigLotto);
-        this.props.onSubmit();
+        this.submitWinningLotto(winningLotto);
     }
 
     toLottoArray(numbers) {
-        if(numbers.indexOf(SPLIT_SYMBOL) < 1) return "";
-        return numbers.split(SPLIT_SYMBOL).map(_number=>Object({number:_number}));
+        if(numbers.indexOf(this.props.splitSymbol) < 1) return "";
+        return numbers.split(this.props.splitSymbol).map(_number=>Object({number:_number}));
     }
 
     submitWinningLotto(lotto) {
@@ -65,8 +62,12 @@ class WinningLottoGenerator extends Component {
                 entity: lotto,
                 headers: {'Content-Type': 'application/json'}
             })
-        }).done(winningLotto=>{
-            self.props.loadFromServer();
+        }).done(()=>{
+            self.setState({
+                winningLottoNumber: "",
+                bonusNumber: ""
+            });
+            this.props.onSubmit();
         })
     }
 
@@ -82,12 +83,12 @@ class WinningLottoGenerator extends Component {
             border: "1px solid #ccc",
             padding: "0.5em 0"
         };
-        const bonusNumber = this.state.bonusNumber.length ? <span style={lottoFontStyle}> + {this.state.bonusNumber} </span> : <span></span>;
+        let bonusNumber = this.props.bonusNumber.length ? <span style={lottoFontStyle}> + {this.props.bonusNumber} </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">
                 <div style={lastNumber} className="form-show-div form-group">
                     <span> 당첨 번호: </span>
-                    <span style={lottoFontStyle}>{this.state.winningNumber}</span>
+                    <span style={lottoFontStyle}>{this.props.winningNumber}</span>
                     {bonusNumber}
                 </div>
                 <div className="form-show-div form-group">

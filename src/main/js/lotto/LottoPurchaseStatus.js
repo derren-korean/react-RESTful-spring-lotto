@@ -15,7 +15,10 @@ class LottoPurchaseStatus extends Component {
     render() {
         const lotto = this.props.lottoList.length == 0 ? <div></div> :
             <div className="form-show-div">
-                <LottoPurchasePrinter list={this.props.lottoList} onDeleteLotto={this.onDeleteLotto} />
+                <LottoPurchasePrinter
+                    list={this.props.lottoList}
+                    onDeleteLotto={this.onDeleteLotto}
+                />
             </div>;
         return (
             <div className="form-show-div margin-bottom">
