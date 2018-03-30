@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import WinningLottoGenerator from "./WinningLottoGenerator";
 import LottoListPrinter from "./LottoListPrinter";
 
+const MAM_PAGE_SIZE = 10;
+
 class Match extends Component {
     constructor(props) {
         super(props);
