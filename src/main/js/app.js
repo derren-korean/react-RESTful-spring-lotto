@@ -39,9 +39,6 @@ class App extends React.Component {
         this.setState({
             [target]:false
         });
-        if ('buy' == target) {
-            this.initClientAndServer();
-        }
     }
     initClientAndServer() {
         this.setState({
@@ -49,6 +46,7 @@ class App extends React.Component {
             result: true
         });
 
+        //todo : delete db
     }
     render() {
         return (
@@ -82,7 +80,7 @@ class App extends React.Component {
                                 {...props}
                                 root={root}
                                 nextStep="buy"
-                                activeNextStep={this.activeNextStep}
+                                initClientAndServer={this.initClientAndServer}
                             />
                         )}/>
                     </div>

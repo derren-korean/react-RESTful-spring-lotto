@@ -64,15 +64,15 @@
 	
 	var _Buy2 = _interopRequireDefault(_Buy);
 	
-	var _Match = __webpack_require__(123);
+	var _Match = __webpack_require__(124);
 	
 	var _Match2 = _interopRequireDefault(_Match);
 	
-	var _Result = __webpack_require__(125);
+	var _Result = __webpack_require__(128);
 	
 	var _Result2 = _interopRequireDefault(_Result);
 	
-	var _CustomNavLink = __webpack_require__(126);
+	var _CustomNavLink = __webpack_require__(129);
 	
 	var _CustomNavLink2 = _interopRequireDefault(_CustomNavLink);
 	
@@ -103,6 +103,7 @@
 	        };
 	        _this.goToLink = _this.goToLink.bind(_this);
 	        _this.activeNextStep = _this.activeNextStep.bind(_this);
+	        _this.initClientAndServer = _this.initClientAndServer.bind(_this);
 	        return _this;
 	    }
 	
@@ -122,6 +123,16 @@
 	        key: 'activeNextStep',
 	        value: function activeNextStep(target) {
 	            this.setState(_defineProperty({}, target, false));
+	        }
+	    }, {
+	        key: 'initClientAndServer',
+	        value: function initClientAndServer() {
+	            this.setState({
+	                match: true,
+	                result: true
+	            });
+	
+	            //todo : delete db
 	        }
 	    }, {
 	        key: 'render',
@@ -164,7 +175,13 @@
 	                                    activeNextStep: _this2.activeNextStep
 	                                }));
 	                            } }),
-	                        _react2.default.createElement(_reactRouterDom.Route, { path: '/result', component: _Result2.default })
+	                        _react2.default.createElement(_reactRouterDom.Route, { path: '/result', component: function component(props) {
+	                                return _react2.default.createElement(_Result2.default, _extends({}, props, {
+	                                    root: root,
+	                                    nextStep: 'buy',
+	                                    initClientAndServer: _this2.initClientAndServer
+	                                }));
+	                            } })
 	                    )
 	                )
 	            );
@@ -22530,7 +22547,7 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            return _react2.default.createElement(_LottoStore2.default, { onSubmit: this.handleSubmit, root: this.props.root });
+	            return _react2.default.createElement(_LottoStore2.default, { activeNextStep: this.handleSubmit, root: this.props.root });
 	        }
 	    }]);
 	
@@ -22563,7 +22580,7 @@
 	
 	var _LottoGenerator2 = _interopRequireDefault(_LottoGenerator);
 	
-	var _LottoPurchaseStatus = __webpack_require__(72);
+	var _LottoPurchaseStatus = __webpack_require__(73);
 	
 	var _LottoPurchaseStatus2 = _interopRequireDefault(_LottoPurchaseStatus);
 	
@@ -22577,8 +22594,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var client = __webpack_require__(74);
-	var follow = __webpack_require__(122);
+	var client = __webpack_require__(75);
+	var follow = __webpack_require__(123);
 	
 	var LottoStore = function (_Component) {
 	    _inherits(LottoStore, _Component);
@@ -22645,7 +22662,7 @@
 	            for (index; index < this.state.totalCount; index++) {
 	                this.onCreate({});
 	            }
-	            this.props.onSubmit();
+	            this.props.activeNextStep();
 	        }
 	    }, {
 	        key: "onCreate",
@@ -22806,6 +22823,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _LottoMachine = __webpack_require__(72);
+	
+	var _LottoMachine2 = _interopRequireDefault(_LottoMachine);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22814,134 +22835,32 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var PARSING_SYMBOL = ",";
-	var MiN_NUMBER = 0;
-	var MAX_NUMBER = 46;
-	var MIN_LENGTH = 11;
-	var MAN_LENGTH = 17;
-	
 	var LottoGenerator = function (_Component) {
 	    _inherits(LottoGenerator, _Component);
 	
-	    function LottoGenerator(props) {
+	    function LottoGenerator() {
 	        _classCallCheck(this, LottoGenerator);
 	
-	        var _this = _possibleConstructorReturn(this, (LottoGenerator.__proto__ || Object.getPrototypeOf(LottoGenerator)).call(this, props));
-	
-	        _this.state = {
-	            numbers: ""
-	        };
-	        _this.handleChange = _this.handleChange.bind(_this);
-	        _this.createLotto = _this.createLotto.bind(_this);
-	        _this.preventSubmit = _this.preventSubmit.bind(_this);
-	        return _this;
+	        return _possibleConstructorReturn(this, (LottoGenerator.__proto__ || Object.getPrototypeOf(LottoGenerator)).apply(this, arguments));
 	    }
 	
 	    _createClass(LottoGenerator, [{
-	        key: "preventSubmit",
-	        value: function preventSubmit(event) {
-	            if (event.keyCode == 13) {
-	                this.createLotto();
-	                event.preventDefault();
-	            }
-	        }
-	    }, {
-	        key: "handleChange",
-	        value: function handleChange(event) {
-	            this.setState({
-	                numbers: event.target.value.trim()
-	            });
-	        }
-	    }, {
-	        key: "createLotto",
-	        value: function createLotto() {
-	            if (this.props.disabled) return;
-	            if (this.hasInvalidValue()) {
-	                alert("입력 형식에 어긋났습니다. 다음과 같이 입력해주세요.\n예시: 1,2,3,4,5,6");
-	                return;
-	            }
-	            if (this.hasInvalidNumber()) {
-	                alert("입력 가능한 숫자는 0 - 45까지 입니다. 중복된 숫자 없이 입력해주세요.\n예시: 1,2,3,4,5,6");
-	                return;
-	            }
-	            this.props.addLotto(this.state.numbers);
-	            this.setState({
-	                numbers: ""
-	            });
-	        }
-	    }, {
-	        key: "hasInvalidValue",
-	        value: function hasInvalidValue() {
-	            if (this.state.numbers.length < MIN_LENGTH || this.state.numbers.length > MAN_LENGTH) return true;
-	            if (this.state.numbers.indexOf(PARSING_SYMBOL) < 1) return true;
-	            return false;
-	        }
-	    }, {
-	        key: "hasInvalidNumber",
-	        value: function hasInvalidNumber() {
-	            var numbers = this.state.numbers.split(PARSING_SYMBOL);
-	            if (numbers.find(function (number) {
-	                return !number.match(/^[0-9]*$/);
-	            })) return true;
-	            if (numbers.find(function (number) {
-	                return number < MiN_NUMBER || number > MAX_NUMBER;
-	            })) return true;
-	            if (this.hasSameNumber(numbers)) return true;
-	            return false;
-	        }
-	    }, {
-	        key: "hasSameNumber",
-	        value: function hasSameNumber(numbers) {
-	            while (numbers.length) {
-	                if (this.contains(numbers, numbers.splice(0, 1))) return true;
-	            }
-	            return false;
-	        }
-	    }, {
-	        key: "contains",
-	        value: function contains(a, number) {
-	            var i = a.length;
-	            while (i--) {
-	                if (a[i] == number) {
-	                    return true;
-	                }
-	            }
-	            return false;
-	        }
-	    }, {
-	        key: "information",
-	        value: function information() {
-	            if (this.props.disabled) {
-	                return _react2.default.createElement(
-	                    "div",
-	                    null,
-	                    _react2.default.createElement(
-	                        "span",
-	                        { className: "redColor" },
-	                        "\uAD6C\uB9E4 \uAE08\uC561\uC744 \uCD94\uAC00\uD558\uBA74 \uD65C\uC131\uD654 \uB429\uB2C8\uB2E4."
-	                    )
-	                );
-	            }
-	            return _react2.default.createElement("div", null);
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
-	            return _react2.default.createElement(
+	            var showDisabled = this.props.disabled ? _react2.default.createElement(
 	                "div",
-	                { className: "disable" },
+	                null,
 	                _react2.default.createElement(
 	                    "span",
-	                    null,
-	                    "\uC608) 1,2,3,4,5,6(\uD55C \uB77C\uC778\uC5D0 6\uAC1C\uB97C \uC785\uB825\uD574\uC8FC\uC138\uC694.) \uC22B\uC790 \uBC94\uC704 : 0~45"
-	                ),
-	                _react2.default.createElement("input", { onChange: this.handleChange, value: this.state.numbers, disabled: this.props.disabled, type: "text", name: "numbers", className: "form-control", placeholder: "1,2,3,4,5,6", onKeyDown: this.preventSubmit }),
-	                _react2.default.createElement(
-	                    "div",
-	                    { onClick: this.createLotto, disabled: this.props.disabled, className: "btn btn-lg btn-primary btn-block" },
-	                    "\uC218\uB3D9 \uAD6C\uB9E4"
-	                ),
-	                this.information()
+	                    { className: "redColor" },
+	                    "\uAD6C\uB9E4 \uAE08\uC561\uC744 \uCD94\uAC00\uD558\uBA74 \uD65C\uC131\uD654 \uB429\uB2C8\uB2E4."
+	                )
+	            ) : _react2.default.createElement("div", null);
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(_LottoMachine2.default, { addLotto: this.props.addLotto, disabled: this.props.disabled, btnSize: "btn-lg" }),
+	                showDisabled
 	            );
 	        }
 	    }]);
@@ -22967,7 +22886,181 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _LottoPurchasePrinter = __webpack_require__(73);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PARSING_SYMBOL = ",";
+	var MiN_NUMBER = 1;
+	var MAX_NUMBER = 45;
+	
+	var ENTER_KEY = 13;
+	var LOTTO_NUMBER_COUNT = 6;
+	
+	var LottoMachine = function (_Component) {
+	    _inherits(LottoMachine, _Component);
+	
+	    function LottoMachine(props) {
+	        _classCallCheck(this, LottoMachine);
+	
+	        var _this = _possibleConstructorReturn(this, (LottoMachine.__proto__ || Object.getPrototypeOf(LottoMachine)).call(this, props));
+	
+	        _this.state = {
+	            numbers: ""
+	        };
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.createLotto = _this.createLotto.bind(_this);
+	        _this.preventSubmit = _this.preventSubmit.bind(_this);
+	
+	        _this.hasSplitSymbol = _this.hasSplitSymbol.bind(_this);
+	        _this.hasInvalidNumber = _this.hasInvalidNumber.bind(_this);
+	        _this.wrongNumberCount = _this.wrongNumberCount.bind(_this);
+	        _this.rangeCheck = _this.rangeCheck.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(LottoMachine, [{
+	        key: "handleChange",
+	        value: function handleChange(event) {
+	            this.setState({
+	                numbers: event.target.value.trim()
+	            });
+	        }
+	    }, {
+	        key: "preventSubmit",
+	        value: function preventSubmit(event) {
+	            if (event.keyCode == ENTER_KEY) {
+	                this.createLotto();
+	                event.preventDefault();
+	            }
+	        }
+	    }, {
+	        key: "createLotto",
+	        value: function createLotto() {
+	            if (this.props.disabled) return;
+	            if (this.hasInvalidValue()) {
+	                alert("입력 형식에 어긋났습니다. 다음과 같이 입력해주세요.\n예시: 1,2,3,4,5,6");
+	                return;
+	            }
+	            if (this.hasInvalidNumber()) {
+	                alert("입력 가능한 숫자는 0 - 45까지 입니다. 중복된 숫자 없이 입력해주세요.\n예시: 1,2,3,4,5,6");
+	                return;
+	            }
+	            this.props.addLotto(this.state.numbers);
+	            this.setState({
+	                numbers: ""
+	            });
+	        }
+	    }, {
+	        key: "hasInvalidValue",
+	        value: function hasInvalidValue() {
+	            if (!this.hasSplitSymbol()) return true;
+	            if (this.wrongNumberCount()) return true;
+	            return false;
+	        }
+	    }, {
+	        key: "hasSplitSymbol",
+	        value: function hasSplitSymbol() {
+	            return this.state.numbers.indexOf(PARSING_SYMBOL) != -1;
+	        }
+	    }, {
+	        key: "wrongNumberCount",
+	        value: function wrongNumberCount() {
+	            return this.state.numbers.split(PARSING_SYMBOL).length != LOTTO_NUMBER_COUNT;
+	        }
+	    }, {
+	        key: "hasInvalidNumber",
+	        value: function hasInvalidNumber() {
+	            var numbers = this.state.numbers.split(PARSING_SYMBOL);
+	            if (this.hasNaN(numbers)) return true;
+	            if (this.rangeCheck(numbers)) return true;
+	            if (this.hasSameNumber(numbers)) return true;
+	            return false;
+	        }
+	    }, {
+	        key: "hasNaN",
+	        value: function hasNaN(numbers) {
+	            return numbers.find(function (number) {
+	                return !number.match(/^[0-9]*$/);
+	            });
+	        }
+	    }, {
+	        key: "rangeCheck",
+	        value: function rangeCheck(numbers) {
+	            return numbers.find(function (number) {
+	                return number < MiN_NUMBER || number > MAX_NUMBER;
+	            });
+	        }
+	    }, {
+	        key: "hasSameNumber",
+	        value: function hasSameNumber(numbers) {
+	            while (numbers.length) {
+	                if (this.contains(numbers, numbers.splice(0, 1))) return true;
+	            }
+	            return false;
+	        }
+	    }, {
+	        key: "contains",
+	        value: function contains(a, number) {
+	            var i = a.length;
+	            while (i--) {
+	                if (a[i] == number) {
+	                    return true;
+	                }
+	            }
+	            return false;
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var btnClassName = "btn btn-primary btn-block ";
+	            if (this.props.btnSize) {
+	                btnClassName += this.props.btnSize;
+	            }
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "disable" },
+	                _react2.default.createElement(
+	                    "span",
+	                    null,
+	                    "\uC608) 1,2,3,4,5,6(\uD55C \uB77C\uC778\uC5D0 6\uAC1C\uB97C \uC785\uB825\uD574\uC8FC\uC138\uC694.) \uC22B\uC790 \uBC94\uC704 : 0~45"
+	                ),
+	                _react2.default.createElement("input", { onChange: this.handleChange, onKeyDown: this.preventSubmit, value: this.state.numbers, disabled: this.props.disabled, type: "text", name: "numbers", className: "form-control", placeholder: "1,2,3,4,5,6" }),
+	                _react2.default.createElement(
+	                    "div",
+	                    { onClick: this.createLotto, disabled: this.props.disabled, className: btnClassName },
+	                    "\uB85C\uB610 \uB4F1\uB85D"
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return LottoMachine;
+	}(_react.Component);
+	
+	exports.default = LottoMachine;
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _LottoPurchasePrinter = __webpack_require__(74);
 	
 	var _LottoPurchasePrinter2 = _interopRequireDefault(_LottoPurchasePrinter);
 	
@@ -23050,7 +23143,7 @@
 	exports.default = LottoPurchaseStatus;
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -23137,27 +23230,27 @@
 	exports.default = LottoPurchasePrinter;
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var rest = __webpack_require__(75);
-	var defaultRequest = __webpack_require__(103);
-	var mime = __webpack_require__(105);
-	var uriTemplateInterceptor = __webpack_require__(119);
-	var errorCode = __webpack_require__(120);
-	var baseRegistry = __webpack_require__(107);
+	var rest = __webpack_require__(76);
+	var defaultRequest = __webpack_require__(104);
+	var mime = __webpack_require__(106);
+	var uriTemplateInterceptor = __webpack_require__(120);
+	var errorCode = __webpack_require__(121);
+	var baseRegistry = __webpack_require__(108);
 	
 	var registry = baseRegistry.child();
 	
-	registry.register('text/uri-list', __webpack_require__(121));
-	registry.register('application/hal+json', __webpack_require__(108));
+	registry.register('text/uri-list', __webpack_require__(122));
+	registry.register('application/hal+json', __webpack_require__(109));
 	
 	module.exports = rest.wrap(mime, { registry: registry }).wrap(uriTemplateInterceptor).wrap(errorCode).wrap(defaultRequest, { headers: { 'Accept': 'application/hal+json' } });
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -23172,8 +23265,8 @@
 	
 		!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require) {
 	
-			var rest = __webpack_require__(76),
-			    browser = __webpack_require__(79);
+			var rest = __webpack_require__(77),
+			    browser = __webpack_require__(80);
 	
 			rest.setPlatformDefaultClient(browser);
 	
@@ -23182,13 +23275,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -23263,7 +23356,7 @@
 	
 			var client, target, platformDefault;
 	
-			client = __webpack_require__(77);
+			client = __webpack_require__(78);
 	
 			/**
 			 * Make a request with the default client
@@ -23312,13 +23405,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -23382,20 +23475,20 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -23412,11 +23505,11 @@
 	
 			var when, UrlBuilder, normalizeHeaderName, responsePromise, client, headerSplitRE;
 	
-			when = __webpack_require__(80);
-			UrlBuilder = __webpack_require__(99);
-			normalizeHeaderName = __webpack_require__(101);
-			responsePromise = __webpack_require__(102);
-			client = __webpack_require__(77);
+			when = __webpack_require__(81);
+			UrlBuilder = __webpack_require__(100);
+			normalizeHeaderName = __webpack_require__(102);
+			responsePromise = __webpack_require__(103);
+			client = __webpack_require__(78);
 	
 			// according to the spec, the line break is '\r\n', but doesn't hold true in practice
 			headerSplitRE = /[\r|\n]+/;
@@ -23568,14 +23661,14 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78),
+		__webpack_require__(79),
 		typeof window !== 'undefined' ? window : void 0
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -23589,24 +23682,24 @@
 	(function(define) { 'use strict';
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require) {
 	
-		var timed = __webpack_require__(81);
-		var array = __webpack_require__(85);
-		var flow = __webpack_require__(88);
-		var fold = __webpack_require__(89);
-		var inspect = __webpack_require__(90);
-		var generate = __webpack_require__(91);
-		var progress = __webpack_require__(92);
-		var withThis = __webpack_require__(93);
-		var unhandledRejection = __webpack_require__(94);
-		var TimeoutError = __webpack_require__(84);
+		var timed = __webpack_require__(82);
+		var array = __webpack_require__(86);
+		var flow = __webpack_require__(89);
+		var fold = __webpack_require__(90);
+		var inspect = __webpack_require__(91);
+		var generate = __webpack_require__(92);
+		var progress = __webpack_require__(93);
+		var withThis = __webpack_require__(94);
+		var unhandledRejection = __webpack_require__(95);
+		var TimeoutError = __webpack_require__(85);
 	
 		var Promise = [array, flow, fold, generate, progress,
 			inspect, withThis, timed, unhandledRejection]
 			.reduce(function(Promise, feature) {
 				return feature(Promise);
-			}, __webpack_require__(96));
+			}, __webpack_require__(97));
 	
-		var apply = __webpack_require__(87)(Promise);
+		var apply = __webpack_require__(88)(Promise);
 	
 		// Public API
 	
@@ -23805,11 +23898,11 @@
 	
 		return when;
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	})(__webpack_require__(78));
+	})(__webpack_require__(79));
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -23819,8 +23912,8 @@
 	(function(define) { 'use strict';
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(require) {
 	
-		var env = __webpack_require__(82);
-		var TimeoutError = __webpack_require__(84);
+		var env = __webpack_require__(83);
+		var TimeoutError = __webpack_require__(85);
 	
 		function setTimeout(f, ms, x, y) {
 			return env.setTimer(function() {
@@ -23889,11 +23982,11 @@
 		};
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process) {/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -23927,7 +24020,7 @@
 	
 		} else if (!capturedSetTimeout) { // vert.x
 			var vertxRequire = require;
-			var vertx = __webpack_require__(83);
+			var vertx = __webpack_require__(84);
 			setTimer = function (f, ms) { return vertx.setTimer(ms, f); };
 			clearTimer = vertx.cancelTimer;
 			asap = vertx.runOnLoop || vertx.runOnContext;
@@ -23968,18 +24061,18 @@
 			};
 		}
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports) {
 
 	/* (ignored) */
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24008,10 +24101,10 @@
 	
 		return TimeoutError;
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24021,8 +24114,8 @@
 	(function(define) { 'use strict';
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(require) {
 	
-		var state = __webpack_require__(86);
-		var applier = __webpack_require__(87);
+		var state = __webpack_require__(87);
+		var applier = __webpack_require__(88);
 	
 		return function array(Promise) {
 	
@@ -24312,11 +24405,11 @@
 		};
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24353,11 +24446,11 @@
 		}
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24412,13 +24505,13 @@
 		}
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 	
 	
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24580,11 +24673,11 @@
 		}
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24613,11 +24706,11 @@
 		};
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24627,7 +24720,7 @@
 	(function(define) { 'use strict';
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(require) {
 	
-		var inspect = __webpack_require__(86).inspect;
+		var inspect = __webpack_require__(87).inspect;
 	
 		return function inspection(Promise) {
 	
@@ -24639,11 +24732,11 @@
 		};
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24710,11 +24803,11 @@
 		};
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24740,11 +24833,11 @@
 		};
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24783,12 +24876,12 @@
 		};
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 	
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24798,8 +24891,8 @@
 	(function(define) { 'use strict';
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(require) {
 	
-		var setTimer = __webpack_require__(82).setTimer;
-		var format = __webpack_require__(95);
+		var setTimer = __webpack_require__(83).setTimer;
+		var format = __webpack_require__(96);
 	
 		return function unhandledRejection(Promise) {
 	
@@ -24876,11 +24969,11 @@
 		function noop() {}
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24938,11 +25031,11 @@
 		}
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -24952,20 +25045,20 @@
 	(function(define) { 'use strict';
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require) {
 	
-		var makePromise = __webpack_require__(97);
-		var Scheduler = __webpack_require__(98);
-		var async = __webpack_require__(82).asap;
+		var makePromise = __webpack_require__(98);
+		var Scheduler = __webpack_require__(99);
+		var async = __webpack_require__(83).asap;
 	
 		return makePromise({
 			scheduler: new Scheduler(async)
 		});
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	})(__webpack_require__(78));
+	})(__webpack_require__(79));
 
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process) {/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -25922,12 +26015,12 @@
 			return Promise;
 		};
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/** @license MIT License (c) copyright 2010-2014 original author or authors */
@@ -26009,11 +26102,11 @@
 		return Scheduler;
 	
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
+	}(__webpack_require__(79)));
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26032,7 +26125,7 @@
 	
 			var mixin, origin, urlRE, absoluteUrlRE, fullyQualifiedUrlRE;
 	
-			mixin = __webpack_require__(100);
+			mixin = __webpack_require__(101);
 	
 			urlRE = /([a-z][a-z0-9\+\-\.]*:)\/\/([^@]+@)?(([^:\/]+)(:([0-9]+))?)?(\/[^?#]*)?(\?[^#]*)?(#\S*)?/i;
 			absoluteUrlRE = /^([a-z][a-z0-9\-\+\.]*:\/\/|\/)/i;
@@ -26241,14 +26334,14 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78),
+		__webpack_require__(79),
 		typeof window !== 'undefined' ? window.location : void 0
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26296,13 +26389,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26340,13 +26433,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26361,8 +26454,8 @@
 	
 		!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require) {
 	
-			var when = __webpack_require__(80),
-				normalizeHeaderName = __webpack_require__(101);
+			var when = __webpack_require__(81),
+				normalizeHeaderName = __webpack_require__(102);
 	
 			function property(promise, name) {
 				return promise.then(
@@ -26486,13 +26579,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26509,8 +26602,8 @@
 	
 			var interceptor, mixinUtil, defaulter;
 	
-			interceptor = __webpack_require__(104);
-			mixinUtil = __webpack_require__(100);
+			interceptor = __webpack_require__(105);
+			mixinUtil = __webpack_require__(101);
 	
 			defaulter = (function () {
 	
@@ -26571,13 +26664,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26594,11 +26687,11 @@
 	
 			var defaultClient, mixin, responsePromise, client, when;
 	
-			defaultClient = __webpack_require__(76);
-			mixin = __webpack_require__(100);
-			responsePromise = __webpack_require__(102);
-			client = __webpack_require__(77);
-			when = __webpack_require__(80);
+			defaultClient = __webpack_require__(77);
+			mixin = __webpack_require__(101);
+			responsePromise = __webpack_require__(103);
+			client = __webpack_require__(78);
+			when = __webpack_require__(81);
 	
 			/**
 			 * Interceptors have the ability to intercept the request and/org response
@@ -26742,13 +26835,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26765,10 +26858,10 @@
 	
 			var interceptor, mime, registry, noopConverter, when;
 	
-			interceptor = __webpack_require__(104);
-			mime = __webpack_require__(106);
-			registry = __webpack_require__(107);
-			when = __webpack_require__(80);
+			interceptor = __webpack_require__(105);
+			mime = __webpack_require__(107);
+			registry = __webpack_require__(108);
+			when = __webpack_require__(81);
 	
 			noopConverter = {
 				read: function (obj) { return obj; },
@@ -26858,13 +26951,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26917,13 +27010,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -26940,8 +27033,8 @@
 	
 			var mime, when, registry;
 	
-			mime = __webpack_require__(106);
-			when = __webpack_require__(80);
+			mime = __webpack_require__(107);
+			when = __webpack_require__(81);
 	
 			function Registry(mimes) {
 	
@@ -27025,11 +27118,11 @@
 			registry = new Registry({});
 	
 			// include provided serializers
-			registry.register('application/hal', __webpack_require__(108));
-			registry.register('application/json', __webpack_require__(115));
-			registry.register('application/x-www-form-urlencoded', __webpack_require__(116));
-			registry.register('multipart/form-data', __webpack_require__(117));
-			registry.register('text/plain', __webpack_require__(118));
+			registry.register('application/hal', __webpack_require__(109));
+			registry.register('application/json', __webpack_require__(116));
+			registry.register('application/x-www-form-urlencoded', __webpack_require__(117));
+			registry.register('multipart/form-data', __webpack_require__(118));
+			registry.register('text/plain', __webpack_require__(119));
 	
 			registry.register('+json', registry.delegate('application/json'));
 	
@@ -27038,13 +27131,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27061,12 +27154,12 @@
 	
 			var pathPrefix, template, find, lazyPromise, responsePromise, when;
 	
-			pathPrefix = __webpack_require__(109);
-			template = __webpack_require__(110);
-			find = __webpack_require__(113);
-			lazyPromise = __webpack_require__(114);
-			responsePromise = __webpack_require__(102);
-			when = __webpack_require__(80);
+			pathPrefix = __webpack_require__(110);
+			template = __webpack_require__(111);
+			find = __webpack_require__(114);
+			lazyPromise = __webpack_require__(115);
+			responsePromise = __webpack_require__(103);
+			when = __webpack_require__(81);
 	
 			function defineProperty(obj, name, value) {
 				Object.defineProperty(obj, name, {
@@ -27183,13 +27276,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27206,8 +27299,8 @@
 	
 			var interceptor, UrlBuilder;
 	
-			interceptor = __webpack_require__(104);
-			UrlBuilder = __webpack_require__(99);
+			interceptor = __webpack_require__(105);
+			UrlBuilder = __webpack_require__(100);
 	
 			function startsWith(str, prefix) {
 				return str.indexOf(prefix) === 0;
@@ -27248,13 +27341,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27271,9 +27364,9 @@
 	
 			var interceptor, uriTemplate, mixin;
 	
-			interceptor = __webpack_require__(104);
-			uriTemplate = __webpack_require__(111);
-			mixin = __webpack_require__(100);
+			interceptor = __webpack_require__(105);
+			uriTemplate = __webpack_require__(112);
+			mixin = __webpack_require__(101);
 	
 			/**
 			 * Applies request params to the path as a URI Template
@@ -27310,13 +27403,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27335,7 +27428,7 @@
 	
 			var uriEncoder, operations, prefixRE;
 	
-			uriEncoder = __webpack_require__(112);
+			uriEncoder = __webpack_require__(113);
 	
 			prefixRE = /^([^:]*):([0-9]+)$/;
 			operations = {
@@ -27488,13 +27581,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27674,13 +27767,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27721,13 +27814,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27744,7 +27837,7 @@
 	
 			var when;
 	
-			when = __webpack_require__(80);
+			when = __webpack_require__(81);
 	
 			/**
 			 * Create a promise whose work is started only when a handler is registered.
@@ -27782,13 +27875,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27835,13 +27928,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -27931,13 +28024,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -28010,13 +28103,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -28045,13 +28138,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28059,7 +28152,7 @@
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require) {
 		'use strict';
 	
-		var interceptor = __webpack_require__(104);
+		var interceptor = __webpack_require__(105);
 	
 		return interceptor({
 			request: function request(_request /*, config, meta */) {
@@ -28075,7 +28168,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -28092,8 +28185,8 @@
 	
 			var interceptor, when;
 	
-			interceptor = __webpack_require__(104);
-			when = __webpack_require__(80);
+			interceptor = __webpack_require__(105);
+			when = __webpack_require__(81);
 	
 			/**
 			 * Rejects the response promise based on the status code.
@@ -28122,13 +28215,13 @@
 		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	
 	}(
-		__webpack_require__(78)
+		__webpack_require__(79)
 		// Boilerplate for AMD and Node
 	));
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28157,7 +28250,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -28204,7 +28297,7 @@
 	};
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -28219,13 +28312,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _LottoTrPrinter = __webpack_require__(124);
+	var _LottoTrPrinter = __webpack_require__(125);
 	
 	var _LottoTrPrinter2 = _interopRequireDefault(_LottoTrPrinter);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _WinningLottoGenerator = __webpack_require__(126);
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	var _WinningLottoGenerator2 = _interopRequireDefault(_WinningLottoGenerator);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -28233,9 +28328,11 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var client = __webpack_require__(74);
-	var follow = __webpack_require__(122);
-	var when = __webpack_require__(80);
+	var client = __webpack_require__(75);
+	var follow = __webpack_require__(123);
+	var when = __webpack_require__(81);
+	
+	var MAM_PAGE_SIZE = 10;
 	
 	var Match = function (_Component) {
 	    _inherits(Match, _Component);
@@ -28245,13 +28342,8 @@
 	
 	        var _this = _possibleConstructorReturn(this, (Match.__proto__ || Object.getPrototypeOf(Match)).call(this, props));
 	
-	        _this.state = {
-	            winningNumber: "",
-	            bonusNumber: 0,
-	            lottoList: []
-	        };
+	        _this.state = { lottoList: [] };
 	
-	        _this.handleChange = _this.handleChange.bind(_this);
 	        _this.handleSubmit = _this.handleSubmit.bind(_this);
 	        _this.loadFromServer = _this.loadFromServer.bind(_this);
 	        return _this;
@@ -28260,7 +28352,7 @@
 	    _createClass(Match, [{
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
-	            this.loadFromServer(10);
+	            this.loadFromServer(MAM_PAGE_SIZE);
 	        }
 	    }, {
 	        key: "loadFromServer",
@@ -28300,18 +28392,8 @@
 	            });
 	        }
 	    }, {
-	        key: "handleChange",
-	        value: function handleChange(event) {
-	            var target = event.target;
-	            var name = target.name;
-	
-	            this.setState(_defineProperty({}, name, target.value));
-	
-	            console.log(target.value);
-	        }
-	    }, {
 	        key: "handleSubmit",
-	        value: function handleSubmit(event) {
+	        value: function handleSubmit() {
 	            this.props.activeNextStep(this.props.nextStep);
 	        }
 	    }, {
@@ -28320,39 +28402,7 @@
 	            return _react2.default.createElement(
 	                "div",
 	                null,
-	                _react2.default.createElement(
-	                    "form",
-	                    { onSubmit: this.handleSubmit, className: "form-show" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "form-show-div form-group" },
-	                        _react2.default.createElement(
-	                            "label",
-	                            null,
-	                            " \uC9C0\uB09C \uC8FC \uB2F9\uCCA8 \uBC88\uD638:",
-	                            _react2.default.createElement("input", { type: "text", className: "form-control", name: "winningNumber", placeholder: "1,2,3,4,5,6" })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "form-show-div form-group" },
-	                        _react2.default.createElement(
-	                            "label",
-	                            null,
-	                            " 2\uB4F1 \uBCF4\uB108\uC2A4 \uBCFC:",
-	                            _react2.default.createElement("input", { type: "number", className: "form-control", name: "bonusNumber" })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "submit-button" },
-	                        _react2.default.createElement(
-	                            "button",
-	                            { type: "submit", value: "Submit", className: "btn btn-lg btn-primary btn-block" },
-	                            "\uB2F9\uCCA8 \uBC88\uD638"
-	                        )
-	                    )
-	                ),
+	                _react2.default.createElement(_WinningLottoGenerator2.default, { root: this.props.root, onSubmit: this.handleSubmit }),
 	                _react2.default.createElement(
 	                    "pre",
 	                    { className: "pre-scrollable" },
@@ -28402,7 +28452,7 @@
 	exports.default = Match;
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -28460,7 +28510,294 @@
 	exports.default = LottoTrPrinter;
 
 /***/ }),
-/* 125 */
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _LottoMachine = __webpack_require__(72);
+	
+	var _LottoMachine2 = _interopRequireDefault(_LottoMachine);
+	
+	var _BonusNumberMachine = __webpack_require__(127);
+	
+	var _BonusNumberMachine2 = _interopRequireDefault(_BonusNumberMachine);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var client = __webpack_require__(75);
+	var follow = __webpack_require__(123);
+	
+	var SPLIT_SYMBOL = ",";
+	
+	var WinningLottoGenerator = function (_Component) {
+	    _inherits(WinningLottoGenerator, _Component);
+	
+	    function WinningLottoGenerator(props) {
+	        _classCallCheck(this, WinningLottoGenerator);
+	
+	        var _this = _possibleConstructorReturn(this, (WinningLottoGenerator.__proto__ || Object.getPrototypeOf(WinningLottoGenerator)).call(this, props));
+	
+	        _this.state = {
+	            winningNumber: "",
+	            bonusNumber: ""
+	        };
+	        _this.setWinningNumber = _this.setWinningNumber.bind(_this);
+	        _this.setBonusNumber = _this.setBonusNumber.bind(_this);
+	        _this.submitWinningLotto = _this.submitWinningLotto.bind(_this);
+	        _this.handleSubmit = _this.handleSubmit.bind(_this);
+	        _this.toLottoArray = _this.toLottoArray.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(WinningLottoGenerator, [{
+	        key: "setWinningNumber",
+	        value: function setWinningNumber(number) {
+	            this.setState({
+	                winningNumber: number
+	            });
+	        }
+	    }, {
+	        key: "setBonusNumber",
+	        value: function setBonusNumber(number) {
+	            this.setState({
+	                bonusNumber: number
+	            });
+	        }
+	    }, {
+	        key: "handleSubmit",
+	        value: function handleSubmit(event) {
+	            event.preventDefault();
+	            var winnigLotto = { lotto: this.toLottoArray(this.state.winningNumber), luckyNumber: { number: this.state.bonusNumber } };
+	            if (this.state.winningNumber.length == 0) {
+	                if (!confirm("당첨 번호를 입력하지 않으면 자동으로 입력됩니다. 진행하시겠습니까?")) {
+	                    return;
+	                }
+	                winnigLotto = {};
+	            }
+	            if (this.state.winningNumber.length && this.state.bonusNumber.length == 0) {
+	                alert("행운 번호를 입력해주세요.");
+	                return;
+	            }
+	            this.submitWinningLotto(winnigLotto);
+	            this.props.onSubmit();
+	        }
+	    }, {
+	        key: "toLottoArray",
+	        value: function toLottoArray(numbers) {
+	            if (numbers.indexOf(SPLIT_SYMBOL) < 1) return "";
+	            return numbers.split(SPLIT_SYMBOL).map(function (_number) {
+	                return Object({ number: _number });
+	            });
+	        }
+	    }, {
+	        key: "submitWinningLotto",
+	        value: function submitWinningLotto(lotto) {
+	            follow(client, this.props.root, ['winningLottoes']).then(function (response) {
+	                return client({
+	                    method: 'POST',
+	                    path: response.entity._links.self.href,
+	                    entity: lotto,
+	                    headers: { 'Content-Type': 'application/json' }
+	                });
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var lottoFontStyle = {
+	                fontWeight: 'bold',
+	                fontSize: 'large'
+	            };
+	            var lastNumber = {
+	                backgroundColor: "#eee",
+	                borderRadius: "3px",
+	                textAlign: "center",
+	                border: "1px solid #ccc",
+	                padding: "0.5em 0"
+	            };
+	            var bonusNumber = this.state.bonusNumber.length ? _react2.default.createElement(
+	                "span",
+	                { style: lottoFontStyle },
+	                " + ",
+	                this.state.bonusNumber,
+	                " "
+	            ) : _react2.default.createElement("span", null);
+	            return _react2.default.createElement(
+	                "form",
+	                { onSubmit: this.handleSubmit, className: "form-show" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { style: lastNumber, className: "form-show-div form-group" },
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        " \uB2F9\uCCA8 \uBC88\uD638: "
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        { style: lottoFontStyle },
+	                        this.state.winningNumber
+	                    ),
+	                    bonusNumber
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "form-show-div form-group" },
+	                    _react2.default.createElement(_LottoMachine2.default, { className: "margin-bottom", addLotto: this.setWinningNumber, btnSize: "btn-sm" })
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "form-show-div form-group" },
+	                    _react2.default.createElement(_BonusNumberMachine2.default, { lotto: this.state.winningNumber, addNumber: this.setBonusNumber })
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "submit-button" },
+	                    _react2.default.createElement(
+	                        "button",
+	                        { type: "submit", value: "Submit", className: "btn btn-lg btn-primary btn-block" },
+	                        "\uACB0\uACFC \uD655\uC778"
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return WinningLottoGenerator;
+	}(_react.Component);
+	
+	exports.default = WinningLottoGenerator;
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var MIN_NUMBER = 1;
+	var MAX_NUMBER = 45;
+	var ENTER_KEY = 13;
+	
+	var BonusNumberMachine = function (_Component) {
+	    _inherits(BonusNumberMachine, _Component);
+	
+	    function BonusNumberMachine(props) {
+	        _classCallCheck(this, BonusNumberMachine);
+	
+	        var _this = _possibleConstructorReturn(this, (BonusNumberMachine.__proto__ || Object.getPrototypeOf(BonusNumberMachine)).call(this, props));
+	
+	        _this.state = { bonusNumber: '' };
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.addNumber = _this.addNumber.bind(_this);
+	        _this.preventSubmit = _this.preventSubmit.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(BonusNumberMachine, [{
+	        key: "preventSubmit",
+	        value: function preventSubmit(event) {
+	            if (event.keyCode == ENTER_KEY) {
+	                this.addNumber();
+	                event.preventDefault();
+	            }
+	        }
+	    }, {
+	        key: "handleChange",
+	        value: function handleChange(event) {
+	            this.setState({
+	                bonusNumber: event.target.value
+	            });
+	        }
+	    }, {
+	        key: "addNumber",
+	        value: function addNumber() {
+	            if (this.invalid(this.state.bonusNumber)) return;
+	            this.props.addNumber(this.state.bonusNumber);
+	        }
+	    }, {
+	        key: "invalid",
+	        value: function invalid(value) {
+	            if (value < MIN_NUMBER || value > MAX_NUMBER) {
+	                alert("숫자 입력 가능 범위 : " + MIN_NUMBER + " ~ " + MAX_NUMBER);
+	                return true;
+	            }
+	            if (this.props.lotto.length == 0) {
+	                alert("당첨 번호를 먼저 입력해주세요.");
+	                return true;
+	            }
+	            if (this.props.lotto.indexOf(value) > -1) {
+	                alert("당첨 번호에 같은 번호가 있습니다.\n 다른 번호를 입력해주세요.");
+	                return true;
+	            }
+	            return false;
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var btnStyle = {
+	                marginLeft: "1em",
+	                marginBottom: "5px"
+	            };
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    "label",
+	                    null,
+	                    "2\uB4F1 \uBCF4\uB108\uC2A4 \uBCFC:",
+	                    _react2.default.createElement("input", { onChange: this.handleChange, onKeyDown: this.preventSubmit, type: "text", value: this.state.bonusNumber, className: "form-control", maxLength: "2" })
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { onClick: this.addNumber, style: btnStyle, className: "btn btn-primary btn-md" },
+	                    "\uCD94\uAC00"
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return BonusNumberMachine;
+	}(_react.Component);
+	
+	exports.default = BonusNumberMachine;
+
+/***/ }),
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -28496,10 +28833,17 @@
 	    }
 	
 	    _createClass(Result, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            //todo : 일치하는 여부 및 금액에 대한 정보 가져오기
+	            //todo : 해당 매칭 가져오기
+	            //todo : 총 수익률 가져오기
+	        }
+	    }, {
 	        key: "handleSubmit",
 	        value: function handleSubmit(event) {
-	            alert('A name was submitted: ' + this.state.winningNumber + "\r\n" + this.state.bonusNumber);
 	            event.preventDefault();
+	            this.props.initClientAndServer();
 	        }
 	    }, {
 	        key: "render",
@@ -28621,7 +28965,7 @@
 	exports.default = Result;
 
 /***/ }),
-/* 126 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

@@ -7,9 +7,15 @@ class Result extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        //todo : 일치하는 여부 및 금액에 대한 정보 가져오기
+        //todo : 해당 매칭 가져오기
+        //todo : 총 수익률 가져오기
+    }
+
     handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.winningNumber +"\r\n"+ this.state.bonusNumber);
         event.preventDefault();
+        this.props.initClientAndServer();
     }
 
     render() {

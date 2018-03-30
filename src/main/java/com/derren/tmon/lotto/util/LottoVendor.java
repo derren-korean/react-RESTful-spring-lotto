@@ -39,7 +39,7 @@ public class LottoVendor {
     }
 
     public void result(Lotteries lotteries) {
-        Lotto jackpot = InputView.inputManualLotto("지난 주 당첨 번호를 입력해 주세요.");
+        Lotto jackpot = InputView.inputManualLotto("당첨 번호를 입력해 주세요.");
         LottoNumber luckyNumber = InputView.inputLuckyNumber(jackpot);
 
         OutputView.printResult(jackpot.match(lotteries, luckyNumber));

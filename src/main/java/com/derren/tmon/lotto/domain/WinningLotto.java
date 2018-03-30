@@ -2,6 +2,7 @@ package com.derren.tmon.lotto.domain;
 
 import com.derren.tmon.lotto.util.LottoRecorder;
 import lombok.Data;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ public class WinningLotto extends Lotto {
         this.luckyNumber = luckyNumber;
     }
 
+    // used-by-client
     public WinningLotto() {
         super(new Lotto());
 

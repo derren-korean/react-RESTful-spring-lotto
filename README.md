@@ -23,3 +23,18 @@ curl -X POST localhost:8080/api/lottoes -d "{\"lotto\" : [1,2,3,4,5,6]}" -H "Con
 
 * 담청 번호 생성
 curl -X POST localhost:8080/api/winningLottoes -d "{\"lotto\" : [1,2,3,4,5,6], \"luckyNumber\": {\"number\":7}}" -H "Content-Type:application/json"
+
+## todo List
+app.js
+
+* 초기화시 서버 디비 제거 
+
+result.js
+
+* 일치하는 여부 및 금액에 대한 정보 받아오기
+* 해당 매칭 결과 받아오기
+* 총 수익률 받아오기
+  
+app.js 
+
+* state & history 관리

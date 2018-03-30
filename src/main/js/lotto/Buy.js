@@ -13,7 +13,7 @@ class Buy extends Component {
     }
 
     render() {
-        return (<LottoStore onSubmit={this.handleSubmit} root={this.props.root}/>);
+        return (<LottoStore activeNextStep={this.handleSubmit} root={this.props.root}/>);
     }
 }
 

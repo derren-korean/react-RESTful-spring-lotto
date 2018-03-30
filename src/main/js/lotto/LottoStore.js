@@ -58,7 +58,7 @@ class LottoStore extends Component {
         for (index; index < this.state.totalCount; index++) {
             this.onCreate({});
         }
-        this.props.onSubmit();
+        this.props.activeNextStep();
     }
 
     onCreate(newLotto) {
