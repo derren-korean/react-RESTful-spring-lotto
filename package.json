@@ -2,6 +2,10 @@
   "name": "lotto",
   "version": "0.1.0",
   "description": "Lotto Demo of ReactJS + Spring Data REST",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:derren-korean/react-RESTful-spring-lotto/tree/dev.git"
+  },
   "keywords": [
     "rest",
     "hateoas",

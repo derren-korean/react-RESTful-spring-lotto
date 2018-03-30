@@ -55,3 +55,4 @@ chrome-user-data
 /benchmark/fixtures
 /examples/**/dist
 /coverage
+/src/main/resources/static/

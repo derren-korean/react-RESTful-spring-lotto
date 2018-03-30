@@ -10,8 +10,8 @@ class LottoStore extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            totalCount: 0,
-            manualLottoList: []
+            manualLottoList: [],
+            totalCount: 0
         };
         this.updateTotalCount = this.updateTotalCount.bind(this);
         this.addLotto = this.addLotto.bind(this);
@@ -51,17 +51,18 @@ class LottoStore extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        let createCount = 0;
         this.state.manualLottoList.forEach(lotto=>{
-            this.onCreate(lotto);
+            this.onCreate(lotto, ++createCount);
         });
         let index = this.state.manualLottoList.length;
         for (index; index < this.state.totalCount; index++) {
-            this.onCreate({});
+            this.onCreate({}, ++createCount);
         }
-        this.props.onSubmit();
     }
 
-    onCreate(newLotto) {
+    onCreate(newLotto, createCount) {
+        const self = this;
         follow(client, this.props.root, ['lottoes']).then(response => {
             return client({
                 method: 'POST',
@@ -69,6 +70,11 @@ class LottoStore extends Component {
                 entity: newLotto,
                 headers: {'Content-Type': 'application/json'}
             })
+        }).done(()=>{
+            if (self.state.totalCount == createCount) {
+                self.props.loadLottoList();
+                self.props.activeNextStep();
+            }
         });
     }
 
