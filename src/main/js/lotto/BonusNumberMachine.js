@@ -30,6 +30,9 @@ class BonusNumberMachine extends Component {
     addNumber() {
         if (this.invalid(this.state.bonusNumber)) return;
         this.props.addNumber(this.state.bonusNumber);
+        this.setState({
+            bonusNumber: ""
+        })
     }
 
     invalid(value) {

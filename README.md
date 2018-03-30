@@ -26,3 +26,9 @@ curl -X POST localhost:8080/api/lottoes -d "{\"lotto\" : [1,2,3,4,5,6]}" -H "Con
 
 * 담청 번호 생성
 curl -X POST localhost:8080/api/winningLottoes -d "{\"lotto\" : [1,2,3,4,5,6], \"luckyNumber\": {\"number\":7}}" -H "Content-Type:application/json"
+
+## todo list
+
+* 10개 이후 값이 변하지 않는 이유 : 맥스 페이징 사이즈가 10이여서
+
+* Result의 값을 가져오기. (3개)

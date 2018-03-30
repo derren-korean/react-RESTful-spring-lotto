@@ -22,7 +22,8 @@ class WinningLottoGenerator extends Component {
 
     setWinningNumber(number) {
         this.setState({
-            winningNumber: number
+            winningNumber: number,
+            bonusNumber: "?"
         });
     }
 
@@ -41,7 +42,7 @@ class WinningLottoGenerator extends Component {
             }
             winningLotto = {};
         }
-        if (this.state.winningNumber.length && this.state.bonusNumber.length == 0) {
+        if (this.state.winningNumber.length && this.state.bonusNumber == "?") {
             alert("행운 번호를 입력해주세요.");
             return;
         }
@@ -83,12 +84,14 @@ class WinningLottoGenerator extends Component {
             border: "1px solid #ccc",
             padding: "0.5em 0"
         };
-        let bonusNumber = this.props.bonusNumber.length ? <span style={lottoFontStyle}> + {this.props.bonusNumber} </span> : <span></span>;
+        const winningNumber = this.state.winningNumber.length ? this.state.winningNumber : this.props.winningNumber;
+        let bonusNumber = this.state.bonusNumber.length ? this.state.bonusNumber : this.props.bonusNumber;
+        bonusNumber = bonusNumber.length ? <span style={lottoFontStyle}> + {bonusNumber} </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">
                 <div style={lastNumber} className="form-show-div form-group">
                     <span> 당첨 번호: </span>
-                    <span style={lottoFontStyle}>{this.props.winningNumber}</span>
+                    <span style={lottoFontStyle}>{winningNumber}</span>
                     {bonusNumber}
                 </div>
                 <div className="form-show-div form-group">
