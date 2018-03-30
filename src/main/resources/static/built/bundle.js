@@ -68,11 +68,11 @@
 	
 	var _Match2 = _interopRequireDefault(_Match);
 	
-	var _Result = __webpack_require__(128);
+	var _Result = __webpack_require__(129);
 	
 	var _Result2 = _interopRequireDefault(_Result);
 	
-	var _CustomNavLink = __webpack_require__(129);
+	var _CustomNavLink = __webpack_require__(130);
 	
 	var _CustomNavLink2 = _interopRequireDefault(_CustomNavLink);
 	
@@ -28312,13 +28312,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _LottoTrPrinter = __webpack_require__(125);
-	
-	var _LottoTrPrinter2 = _interopRequireDefault(_LottoTrPrinter);
-	
-	var _WinningLottoGenerator = __webpack_require__(126);
+	var _WinningLottoGenerator = __webpack_require__(125);
 	
 	var _WinningLottoGenerator2 = _interopRequireDefault(_WinningLottoGenerator);
+	
+	var _LottoListPrinter = __webpack_require__(127);
+	
+	var _LottoListPrinter2 = _interopRequireDefault(_LottoListPrinter);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -28413,34 +28413,7 @@
 	                        this.state.lottoList.length,
 	                        "\uAC1C\uB97C \uAD6C\uB9E4 \uD558\uC168\uC2B5\uB2C8\uB2E4>"
 	                    ),
-	                    _react2.default.createElement(
-	                        "table",
-	                        { className: "table" },
-	                        _react2.default.createElement(
-	                            "thead",
-	                            null,
-	                            _react2.default.createElement(
-	                                "tr",
-	                                null,
-	                                _react2.default.createElement("th", null),
-	                                _react2.default.createElement(
-	                                    "th",
-	                                    { className: "text-center" },
-	                                    "\uB85C\uB610 \uBC88\uD638"
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "tbody",
-	                            null,
-	                            this.state.lottoList.map(function (lotto, index) {
-	                                return _react2.default.createElement(_LottoTrPrinter2.default, { key: lotto.toString() + index,
-	                                    lotto: lotto,
-	                                    index: index
-	                                });
-	                            })
-	                        )
-	                    )
+	                    _react2.default.createElement(_LottoListPrinter2.default, { lottoList: this.state.lottoList })
 	                )
 	            );
 	        }
@@ -28467,69 +28440,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var LottoTrPrinter = function (_Component) {
-	    _inherits(LottoTrPrinter, _Component);
-	
-	    function LottoTrPrinter(props) {
-	        _classCallCheck(this, LottoTrPrinter);
-	
-	        return _possibleConstructorReturn(this, (LottoTrPrinter.__proto__ || Object.getPrototypeOf(LottoTrPrinter)).call(this, props));
-	    }
-	
-	    _createClass(LottoTrPrinter, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "tr",
-	                null,
-	                _react2.default.createElement(
-	                    "th",
-	                    { className: "text-center" },
-	                    this.props.index + 1
-	                ),
-	                _react2.default.createElement(
-	                    "td",
-	                    { className: "text-center" },
-	                    this.props.lotto.toString()
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return LottoTrPrinter;
-	}(_react.Component);
-	
-	exports.default = LottoTrPrinter;
-
-/***/ }),
-/* 126 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
 	var _LottoMachine = __webpack_require__(72);
 	
 	var _LottoMachine2 = _interopRequireDefault(_LottoMachine);
 	
-	var _BonusNumberMachine = __webpack_require__(127);
+	var _BonusNumberMachine = __webpack_require__(126);
 	
 	var _BonusNumberMachine2 = _interopRequireDefault(_BonusNumberMachine);
 	
@@ -28686,7 +28601,7 @@
 	exports.default = WinningLottoGenerator;
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -28797,7 +28712,141 @@
 	exports.default = BonusNumberMachine;
 
 /***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _LottoTrPrinter = __webpack_require__(128);
+	
+	var _LottoTrPrinter2 = _interopRequireDefault(_LottoTrPrinter);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LottoListPrinter = function (_Component) {
+	    _inherits(LottoListPrinter, _Component);
+	
+	    function LottoListPrinter() {
+	        _classCallCheck(this, LottoListPrinter);
+	
+	        return _possibleConstructorReturn(this, (LottoListPrinter.__proto__ || Object.getPrototypeOf(LottoListPrinter)).apply(this, arguments));
+	    }
+	
+	    _createClass(LottoListPrinter, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "table",
+	                { className: "table" },
+	                _react2.default.createElement(
+	                    "thead",
+	                    null,
+	                    _react2.default.createElement(
+	                        "tr",
+	                        null,
+	                        _react2.default.createElement("th", null),
+	                        _react2.default.createElement(
+	                            "th",
+	                            { className: "text-center" },
+	                            "\uB85C\uB610 \uBC88\uD638"
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "tbody",
+	                    null,
+	                    this.props.lottoList.map(function (lotto, index) {
+	                        return _react2.default.createElement(_LottoTrPrinter2.default, { key: lotto.toString() + index,
+	                            lotto: lotto,
+	                            index: index
+	                        });
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return LottoListPrinter;
+	}(_react.Component);
+	
+	exports.default = LottoListPrinter;
+
+/***/ }),
 /* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LottoTrPrinter = function (_Component) {
+	    _inherits(LottoTrPrinter, _Component);
+	
+	    function LottoTrPrinter() {
+	        _classCallCheck(this, LottoTrPrinter);
+	
+	        return _possibleConstructorReturn(this, (LottoTrPrinter.__proto__ || Object.getPrototypeOf(LottoTrPrinter)).apply(this, arguments));
+	    }
+	
+	    _createClass(LottoTrPrinter, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "tr",
+	                null,
+	                _react2.default.createElement(
+	                    "th",
+	                    { className: "text-center" },
+	                    this.props.index + 1
+	                ),
+	                _react2.default.createElement(
+	                    "td",
+	                    { className: "text-center" },
+	                    this.props.lotto.toString()
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return LottoTrPrinter;
+	}(_react.Component);
+	
+	exports.default = LottoTrPrinter;
+
+/***/ }),
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -28965,7 +29014,7 @@
 	exports.default = Result;
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
