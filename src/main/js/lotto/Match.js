@@ -10,7 +10,6 @@ class Match extends Component {
 
     handleSubmit() {
         this.props.activeNextStep(this.props.nextStep);
-        this.props.loadFromServer();
     }
 
     render() {

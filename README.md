@@ -29,6 +29,10 @@ curl -X POST localhost:8080/api/winningLottoes -d "{\"lotto\" : [1,2,3,4,5,6], \
 
 ## todo list
 
-* 10개 이후 값이 변하지 않는 이유 : 맥스 페이징 사이즈가 10이여서
+* 로또의 값 10개 가져오도록 설정.
+* 당첨 번호 가져오도록 설정.
+* 서버 db 초기화 되도록.
+* text를 컴포넌트로 변경하기.
 
-* Result의 값을 가져오기. (3개)
+* 서버 - Serialize or JSON.
+* client - 로또 번호 판으로 변경.

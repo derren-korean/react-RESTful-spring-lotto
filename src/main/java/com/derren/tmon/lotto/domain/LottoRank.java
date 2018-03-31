@@ -1,15 +1,12 @@
 package com.derren.tmon.lotto.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonValue;
-
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum LottoRank {
+public enum LottoRank implements Serializable {
     FIFTH(3, 5000),
     FOURTH(4, 50000),
     THIRD(5, 1500000),
@@ -26,12 +23,10 @@ public enum LottoRank {
         this.price = price;
     }
 
-    @JsonValue
     public int getMatchingCount() {
         return matchingCount;
     }
 
-    @JsonValue
     public int getPrice() {
         return price;
     }
@@ -68,5 +63,10 @@ public enum LottoRank {
 
     private static Predicate<LottoRank> sameCount(int count) {
         return rank -> rank.matchingCount == count;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{\"name\": \"%s\", \"matchingCount\": %d, \"price\": %d}", this.name(), matchingCount, price);
     }
 }

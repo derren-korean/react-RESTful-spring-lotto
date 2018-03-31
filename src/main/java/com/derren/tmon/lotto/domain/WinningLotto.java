@@ -29,6 +29,10 @@ public class WinningLotto extends Lotto {
         this.luckyNumber = luckyNumber;
     }
 
+    public Long getLottoId() {
+        return super.getId();
+    }
+
     public LottoNumber getLuckyNumber() {
         return luckyNumber;
     }

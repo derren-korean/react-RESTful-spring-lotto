@@ -1,16 +1,52 @@
 import React, { Component } from "react";
 
+const client = require('../client');
+const RESULT = 0;
+const PROFIT = 1;
+
 class Result extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            lottoRank: [],
+            result: [],
+            profit: ""
+        };
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.loadLottoRank = this.loadLottoRank.bind(this);
+        this.loadResult = this.loadResult.bind(this);
     }
 
     componentDidMount() {
-        //todo : 일치하는 여부 및 금액에 대한 정보 가져오기
-        //todo : 해당 매칭 가져오기
-        //todo : 총 수익률 가져오기
+        this.loadLottoRank();
+        this.loadResult();
+    }
+
+    loadLottoRank() {
+        client({method: 'GET', path: '/lottoRank'}).done(response => {
+            if (response.status.code != 200) {
+                alert("서버 통신을 실패하였습니다.");
+                return;
+            }
+            this.setState({
+                lottoRank: response.entity.map((rank)=>{return JSON.parse(rank.content)})
+            });
+        });
+    }
+
+    loadResult() {
+        client({method: 'GET', path: '/result'}).done(response => {
+            if (response.status.code != 200) {
+                alert("서버 통신을 실패하였습니다.");
+                return;
+            }
+            const results = response.entity._embedded.strings;
+            this.setState({
+                result: results[RESULT].split(',').map((rank)=>JSON.parse(rank)),
+                profit: results[PROFIT]
+            });
+        });
     }
 
     handleSubmit(event) {
@@ -19,6 +55,14 @@ class Result extends Component {
     }
 
     render() {
+        const stateResult = this.state.result;
+        const ready = stateResult.length && this.state.lottoRank;
+        let results = ready ? "" : "<tr></tr>";
+        if (ready) {
+            this.state.lottoRank.forEach((rank, index)=>{
+                results += <tr><th>{rank.matchingCount}개 일치 ({rank.price}원)- {stateResult[index][rank.name]}</th></tr>
+            });
+        }
         return (
             <div>
                 <form onSubmit={this.handleSubmit} className="form-result">
@@ -32,14 +76,10 @@ class Result extends Component {
                             <tr><th><h3 className="text-center">당첨 통계</h3></th>
                         </tr></thead>
                         <tbody>
-                            <tr><th>3개 일치 (5000원)- 0개</th></tr>
-                            <tr><th>4개 일치 (50000원)- 0개</th></tr>
-                            <tr><th>5개 일치 (1500000원)- 0개</th></tr>
-                            <tr><th>5개 일치 보너스 볼 일치(30000000원)- 0개</th></tr>
-                            <tr><th>6개 일치 (2000000000원)- 0개</th></tr>
+                            {results}
                         </tbody>
                         <tfoot>
-                            <tr><th><h4 className="text-center">총 수익률은 0%입니다.</h4></th>
+                            <tr><th><h4 className="text-center">총 수익률은 {this.state.profit}%입니다.</h4></th>
                         </tr></tfoot>
                     </table>
                 </pre>

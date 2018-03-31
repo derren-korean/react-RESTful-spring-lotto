@@ -16,7 +16,8 @@ const follow = require('./follow');
 const when = require('when');
 const root = "/api";
 
-const MAX_PAGE_SIZE = 10;
+const LOTTO_PAGE_SIZE = 10;
+const WINNING_PAGE_SIZE = 1;
 const SPLIT_SYMBOL = ",";
 
 class App extends React.Component {
@@ -38,22 +39,20 @@ class App extends React.Component {
         this.loadLottoList = this.loadLottoList.bind(this);
         this.loadWinningLotto = this.loadWinningLotto.bind(this);
 
+
     }
     componentDidMount() {
         this.activeNextStep("buy");
     }
 
-    loadFromServer(pageSize) {
-        this.loadLottoList(pageSize);
-        this.loadWinningLotto(pageSize);
+    loadFromServer() {
+        this.loadLottoList();
+        this.loadWinningLotto();
     }
 
-    loadLottoList(pageSize) {
-        if (!pageSize) {
-            pageSize = MAX_PAGE_SIZE;
-        }
+    loadLottoList() {
         follow(client, root, [
-            {rel: 'lottoes', params: {size: pageSize}}]
+            {rel: 'lottoes', params: {size: LOTTO_PAGE_SIZE}}]
         ).then(lottoesCollection => {
             return client({
                 method: 'GET',
@@ -78,19 +77,13 @@ class App extends React.Component {
             if (!lottoes.length) return;
             this.setState({
                 lottoList: lottoes.map(lotto=>lotto.entity.lotto.map(number=>number.number)),
-                attributes: Object.keys(this.schema.properties),
-                pageSize: pageSize,
-                links: this.links
             });
         });
     }
 
-    loadWinningLotto(pageSize) {
-        if (!pageSize) {
-            pageSize = MAX_PAGE_SIZE;
-        }
+    loadWinningLotto() {
         follow(client, root, [
-            {rel: 'winningLottoes', params: {size: pageSize}}]
+            {rel: 'winningLottoes', params: {size: WINNING_PAGE_SIZE}}]
         ).then(wLottoesCollection => {
             return client({
                 method: 'GET',
@@ -114,15 +107,11 @@ class App extends React.Component {
         }).done(wlottoes => {
             if(!wlottoes.length) return;
             this.setState({
-                winningNumber: wlottoes[wlottoes.length-1].entity.lotto.map(number=>number.number).join(SPLIT_SYMBOL),
-                bonusNumber: wlottoes[wlottoes.length-1].entity.luckyNumber.number.toString(),
-                attributes: Object.keys(this.schema.properties),
-                pageSize: pageSize,
-                links: this.links
+                winningNumber: wlottoes[0].entity.lotto.map(number=>number.number).join(SPLIT_SYMBOL),
+                bonusNumber: wlottoes[0].entity.luckyNumber.number.toString(),
             });
         });
     }
-
 
     goToLink(e, disabled) {
         if (disabled) {
