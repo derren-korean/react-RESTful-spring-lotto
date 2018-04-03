@@ -9,6 +9,7 @@ class Match extends Component {
     }
 
     handleSubmit() {
+        this.props.loadFromServer();
         this.props.activeNextStep(this.props.nextStep);
     }
 

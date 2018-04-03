@@ -27,10 +27,14 @@ curl -X POST localhost:8080/api/lottoes -d "{\"lotto\" : [1,2,3,4,5,6]}" -H "Con
 * 담청 번호 생성
 curl -X POST localhost:8080/api/winningLottoes -d "{\"lotto\" : [1,2,3,4,5,6], \"luckyNumber\": {\"number\":7}}" -H "Content-Type:application/json"
 
+* 로또 순위 확인
+curl "localhost:8080/lottoRank"
+
+* 결과 확인 (*로또와 담청 번호 생성이 되어 있어야 함.)
+curl "localhost:8080/result"
+
 ## todo list
 
-* 로또의 값 10개 가져오도록 설정.
-* 당첨 번호 가져오도록 설정.
 * 서버 db 초기화 되도록.
 
 * 서버 - Serialize or JSON.

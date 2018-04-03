@@ -44,11 +44,15 @@ class BonusNumberMachine extends Component {
             alert("당첨 번호를 먼저 입력해주세요.");
             return true;
         }
-        if (this.props.lotto.indexOf(value) > -1) {
+        if (this.hasNumber(value)) {
             alert("당첨 번호에 같은 번호가 있습니다.\n 다른 번호를 입력해주세요.");
             return true;
         }
         return false
+    }
+
+    hasNumber(value) {
+        return this.props.lotto.split(",").find(number => number == value);
     }
 
     render() {

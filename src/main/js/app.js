@@ -16,8 +16,8 @@ const follow = require('./follow');
 const when = require('when');
 const root = "/api";
 
-const LOTTO_PAGE_SIZE = 10;
-const WINNING_PAGE_SIZE = 1;
+const LOTTO_MAX_SIZE = 10;
+const WINNING_MAX_SIZE = 1;
 const SPLIT_SYMBOL = ",";
 
 class App extends React.Component {
@@ -51,66 +51,24 @@ class App extends React.Component {
     }
 
     loadLottoList() {
-        follow(client, root, [
-            {rel: 'lottoes', params: {size: LOTTO_PAGE_SIZE}}]
-        ).then(lottoesCollection => {
-            return client({
-                method: 'GET',
-                path: lottoesCollection.entity._links.profile.href,
-                headers: {'Accept': 'application/schema+json'}
-            }).then(schema => {
-                this.schema = schema.entity;
-                this.links = lottoesCollection.entity._links;
-                return lottoesCollection;
+        client({method: 'GET', path: 'lotto/last/'+LOTTO_MAX_SIZE})
+            .done(lottoes => {
+                if (lottoes.entity.length == 0) return;
+                this.setState({
+                    lottoList: lottoes.entity.map(lotto=>lotto.lotto.map(number=>number.number))
+                });
             });
-        }).then(lottoesCollection => {
-            if(!lottoesCollection.entity._embedded.lottoes.length) return false;
-            return lottoesCollection.entity._embedded.lottoes.map(lotto =>
-                client({
-                    method: 'GET',
-                    path: lotto._links.self.href
-                })
-            );
-        }).then(lottoPromises => {
-            return when.all(lottoPromises);
-        }).done(lottoes => {
-            if (!lottoes.length) return;
-            this.setState({
-                lottoList: lottoes.map(lotto=>lotto.entity.lotto.map(number=>number.number)),
-            });
-        });
     }
 
     loadWinningLotto() {
-        follow(client, root, [
-            {rel: 'winningLottoes', params: {size: WINNING_PAGE_SIZE}}]
-        ).then(wLottoesCollection => {
-            return client({
-                method: 'GET',
-                path: wLottoesCollection.entity._links.profile.href,
-                headers: {'Accept': 'application/schema+json'}
-            }).then(schema => {
-                this.schema = schema.entity;
-                this.links = wLottoesCollection.entity._links;
-                return wLottoesCollection;
+        client({method: 'GET', path: 'lotto/last/winning'})
+            .done(wlottoes => {
+                if (!wlottoes.entity.hasOwnProperty('luckyNumber')) return;
+                this.setState({
+                    winningNumber: wlottoes.entity.lotto.map(number=>number.number).join(SPLIT_SYMBOL),
+                    bonusNumber: wlottoes.entity.luckyNumber.number.toString(),
+                });
             });
-        }).then(wlottoesCollection => {
-            if (!wlottoesCollection.entity._embedded.winningLottoes.length) return false;
-            return wlottoesCollection.entity._embedded.winningLottoes.map(lotto =>
-                client({
-                    method: 'GET',
-                    path: lotto._links.self.href
-                })
-            );
-        }).then(wlottoPromises => {
-            return when.all(wlottoPromises);
-        }).done(wlottoes => {
-            if(!wlottoes.length) return;
-            this.setState({
-                winningNumber: wlottoes[0].entity.lotto.map(number=>number.number).join(SPLIT_SYMBOL),
-                bonusNumber: wlottoes[0].entity.luckyNumber.number.toString(),
-            });
-        });
     }
 
     goToLink(e, disabled) {

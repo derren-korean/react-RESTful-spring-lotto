@@ -23,7 +23,7 @@ class ResultPrinter extends Component {
                         )}
                     </tbody>
                     <tfoot>
-                    <tr><th><h4 className="text-center">총 수익률은 {this.props.profit}%입니다.</h4></th>
+                    <tr><th><h4 className="text-center">총 수익률은 {Number(this.props.profit).toLocaleString()}%입니다.</h4></th>
                     </tr></tfoot>
                 </table>
             </pre>
@@ -37,7 +37,7 @@ class ResultTrPrinter extends Component {
         return (
             <tr>
                 <th className="text-center">
-                    {this.props.rank.matchingCount}개 일치 ({this.props.rank.price}원)- {this.props.result[this.props.rank.name]}
+                    {this.props.rank.matchingCount}개 일치 ({this.props.rank.price.toLocaleString()}원)- {this.props.result[this.props.rank.name]}
                 </th>
             </tr>
         )
