@@ -35,6 +35,10 @@ public class ResultController {
     public @ResponseBody ResponseEntity<?> getProducers() {
 
         List<Lotto> lottoList = lottoService.getLastNLottoList(MAX_LOTTO_COUNT);
+        if (lottoList == null || lottoList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
         WinningLotto winningLotto = lottoService.getLastWinningLotto();
         LottoRecorder lottoRecorder = new LottoRecorder(winningLotto, new Lotteries(lottoList));
         List<String> producers = new ArrayList<>();
@@ -52,4 +56,6 @@ public class ResultController {
                 .map(lottoRank -> String.format("{\"%s\":%d}", lottoRank.name(),lottoRecorder.getLottoCount(lottoRank)))
                 .collect(Collectors.joining(","));
     }
+
+
 }

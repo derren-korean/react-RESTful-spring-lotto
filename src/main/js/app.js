@@ -12,13 +12,13 @@ import Result from "./lotto/Result";
 import CustomNavLink from "./ui/CustomNavLink";
 
 const client = require('./client');
-const follow = require('./follow');
-const when = require('when');
 const root = "/api";
 
 const LOTTO_MAX_SIZE = 10;
-const WINNING_MAX_SIZE = 1;
 const SPLIT_SYMBOL = ",";
+
+const RESULT = 0;
+const PROFIT = 1;
 
 class App extends React.Component {
 
@@ -30,19 +30,25 @@ class App extends React.Component {
             result: true,
             lottoList: [],
             winningNumber: "",
-            bonusNumber: ""
+            bonusNumber: "",
+            lottoRank: [],
+            results: {},
+            profit: "",
         };
         this.goToLink = this.goToLink.bind(this);
-        this.loadFromServer = this.loadFromServer.bind(this);
         this.activeNextStep = this.activeNextStep.bind(this);
-        this.initClientAndServer = this.initClientAndServer.bind(this);
+        this.loadLottoRank = this.loadLottoRank.bind(this);
+        this.loadFromServer = this.loadFromServer.bind(this);
         this.loadLottoList = this.loadLottoList.bind(this);
         this.loadWinningLotto = this.loadWinningLotto.bind(this);
-
+        this.loadResult = this.loadResult.bind(this);
+        this.initClientAndServer = this.initClientAndServer.bind(this);
+        this.deleteAllLotto = this.deleteAllLotto.bind(this);
 
     }
     componentDidMount() {
         this.activeNextStep("buy");
+        this.loadLottoRank();
     }
 
     loadFromServer() {
@@ -63,11 +69,18 @@ class App extends React.Component {
     loadWinningLotto() {
         client({method: 'GET', path: 'lotto/last/winning'})
             .done(wlottoes => {
-                if (!wlottoes.entity.hasOwnProperty('luckyNumber')) return;
+                if (!wlottoes.entity.hasOwnProperty('luckyNumber')) {
+                    this.setState({
+                        winningNumber: "",
+                        bonusNumber: ""
+                    });
+                    return;
+                }
                 this.setState({
                     winningNumber: wlottoes.entity.lotto.map(number=>number.number).join(SPLIT_SYMBOL),
                     bonusNumber: wlottoes.entity.luckyNumber.number.toString(),
                 });
+                this.loadResult();
             });
     }
 
@@ -76,6 +89,7 @@ class App extends React.Component {
             e.preventDefault();
         }
     }
+
     activeNextStep(target) {
         this.setState({
             [target]:false
@@ -87,8 +101,66 @@ class App extends React.Component {
             result: true
         });
 
-        //todo : delete db
+        this.deleteAllLotto();
     }
+
+    deleteAllLotto() {
+        client({method: 'GET', path: 'lotto/active'}).done(response => {
+            response.entity.forEach((lotto, index)=>{
+                lotto.active = false;
+                client({
+                    method: 'PUT',
+                    path: lotto.links[0].href,
+                    entity: lotto,
+                    headers: {'Content-Type': 'application/json'}
+                }).done(response=>{
+                    if (response.status.code != 200) {
+                        alert("서버 통신을 실패하였습니다.");
+                        return;
+                    }
+                })
+            })
+        });
+    }
+
+    loadLottoRank() {
+        client({method: 'GET', path: '/lottoRank'}).done(response => {
+            if (response.status.code != 200) {
+                alert("서버 통신을 실패하였습니다.");
+                return;
+            }
+            this.setState({
+                lottoRank: response.entity.map((rank)=>{return JSON.parse(rank.content)})
+            });
+        });
+    }
+
+    loadResult() {
+        client({method: 'GET', path: '/result'}).done(response => {
+            if (response.status.code != 200) {
+                alert("서버 통신을 실패하였습니다.");
+                return;
+            }
+            const results = response.entity._embedded.strings;
+            const resultObject = this.toResultObject(results[RESULT]);
+            this.setState({
+                results: resultObject,
+                profit: results[PROFIT]
+            });
+        });
+    }
+
+    toResultObject(list) {
+        let resultObject = {};
+        list.split(',')
+            .map((rank)=>JSON.parse(rank))
+            .forEach((result,index)=> {
+                let key = Object.keys(result)[0];
+                resultObject[key] = result[key];
+            });
+        return resultObject;
+    }
+
     render() {
         return (
             <BrowserRouter>
@@ -106,7 +178,7 @@ class App extends React.Component {
                                         root={root}
                                         nextStep="match"
                                         activeNextStep={this.activeNextStep}
-                                        loadLottoList={this.loadLottoList}
+                                        loadFromServer={this.loadFromServer}
                                     />
                        )}/>
                         <Route path="/match" component={(props) => (
@@ -131,6 +203,10 @@ class App extends React.Component {
                                 winningNumber={this.state.winningNumber}
                                 bonusNumber={this.state.bonusNumber}
                                 initClientAndServer={this.initClientAndServer}
+                                disabled={this.state.result}
+                                lottoRank={this.state.lottoRank}
+                                result={this.state.results}
+                                profit={this.state.profit}
                             />
                         )}/>
                     </div>

@@ -1,19 +1,19 @@
 package com.derren.tmon.lotto.controller;
 
 import com.derren.tmon.lotto.domain.Lotto;
-import com.derren.tmon.lotto.domain.LottoRank;
 import com.derren.tmon.lotto.domain.WinningLotto;
 import com.derren.tmon.lotto.service.LottoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -48,6 +48,9 @@ public class LottoController {
     @RequestMapping(method = RequestMethod.GET, value = "/last/winning")
     ResponseEntity<?> getLastWinningLotto() {
         WinningLotto winningLotto = lottoService.getLastWinningLotto();
+        if (winningLotto == null) {
+            return ResponseEntity.noContent().build();
+        }
         Resource<WinningLotto> resource = new Resource<>(winningLotto);
         resource.add(linkTo(HomeController.class)
                 .slash(ROOT)
@@ -55,5 +58,23 @@ public class LottoController {
                 .slash(winningLotto.getId())
                 .withRel("lottoes"));
         return ResponseEntity.ok(resource);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/active")
+    ResponseEntity<?> getActiveLotto() {
+        List<Resource<Lotto>> lottoList = new ArrayList<>();
+        lottoService.findActiveLotto()
+                .forEach(lotto->{
+                    Resource<Lotto> resource = new Resource<>(lotto);
+                    resource.add(linkTo(HomeController.class)
+                            .slash(ROOT)
+                            .slash("lottoes")
+                            .slash(lotto.getId())
+                            .withRel("lottoes"));
+                    lottoList.add(resource);
+                });
+        Resources<Resource<Lotto>> resources = new Resources<>(lottoList);
+        resources.add(linkTo(methodOn(LottoController.class).getActiveLotto()).withRel("lottoes"));
+        return ResponseEntity.ok(resources.getContent());
     }
 }

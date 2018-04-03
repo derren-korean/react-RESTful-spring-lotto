@@ -2,16 +2,16 @@ package com.derren.tmon.lotto.domain;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import javax.annotation.Resource;
 import java.util.List;
 
-@RestResource
+@Transactional(readOnly = true)
+@Resource
 public interface WinningLottoRepository extends JpaRepository<WinningLotto, Long> {
 
-    WinningLotto findFirstByOrderByIdDesc();
+    WinningLotto findFirstByActiveIsTrueOrderByIdDesc();
 
-    List<WinningLotto> findWinningLottosByOrderByIdDesc(Pageable pageable);
-
+    List<WinningLotto> findWinningLottosByActiveIsTrueOrderByIdDesc(Pageable pageable);
 }

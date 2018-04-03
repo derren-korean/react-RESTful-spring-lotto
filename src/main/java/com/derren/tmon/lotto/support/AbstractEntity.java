@@ -3,10 +3,7 @@ package com.derren.tmon.lotto.support;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,6 +24,9 @@ public class AbstractEntity {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    @Column(name = "IS_ACTIVE", columnDefinition = "boolean default true", nullable = false)
+    private Boolean active = true;
+
     public AbstractEntity() {
     }
 
@@ -46,6 +46,10 @@ public class AbstractEntity {
     @JsonIgnore
     public String getFormattedModifiedDate() {
         return getFormattedDate(modifiedDate, "yyyy.MM.dd HH:mm:ss");
+    }
+
+    public Boolean getActive() {
+        return active;
     }
 
     private String getFormattedDate(LocalDateTime dateTime, String format) {

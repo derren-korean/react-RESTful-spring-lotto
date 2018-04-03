@@ -10,7 +10,7 @@ class Buy extends Component {
 
     handleSubmit() {
         this.props.activeNextStep(this.props.nextStep);
-        this.props.loadLottoList();
+        this.props.loadFromServer();
     }
 
     render() {
