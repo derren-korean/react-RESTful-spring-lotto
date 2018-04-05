@@ -130,3 +130,32 @@ ul.header li a {
     border-color: #204d74;
     cursor: pointer;
 }
+
+.lottoNumber {
+    display : inline-block;
+    width : 26px;
+    height : 26px;
+    padding-top : 3px;
+    border-radius : 50%;
+    color : #fff;
+}
+
+.lottoNumberBelow10 {
+    background-image: -webkit-linear-gradient(top, #fbb52e 0, #d6971d 100%);
+}
+
+.lottoNumberBelow20 {
+    background-image: -webkit-linear-gradient(top, #2e7dd6 0, #215c9e 100%);
+}
+
+.lottoNumberBelow30 {
+    background-image: -webkit-linear-gradient(top, #f83622 0, #bb2a1b 100%);
+}
+
+.lottoNumberBelow40 {
+    background-image: -webkit-linear-gradient(top, #6f7070 0, #4b4c4c 100%);
+}
+
+.lottoNumberBelow45 {
+    background-image: -webkit-linear-gradient(top, #51b00d 0, #387909 100%);
+}
