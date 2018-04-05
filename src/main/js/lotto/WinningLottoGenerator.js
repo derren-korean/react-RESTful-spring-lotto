@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import LottoMachine from "./LottoMachine";
 import BonusNumberMachine from "./BonusNumberMachine";
+import LottoNumber from "./LottoNumber";
 
 const client = require('../client');
 const follow = require('../follow');
@@ -86,13 +87,14 @@ class WinningLottoGenerator extends Component {
         };
         const winningNumber = this.state.winningNumber.length ? this.state.winningNumber : this.props.winningNumber;
         let bonusNumber = this.state.bonusNumber.length ? this.state.bonusNumber : this.props.bonusNumber;
-        bonusNumber = bonusNumber.length ? <span style={lottoFontStyle}> + {bonusNumber} </span> : <span></span>;
+        // bonusNumber = bonusNumber.length ? <span style={lottoFontStyle}> + {bonusNumber} </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">
                 <div style={lastNumber} className="form-show-div form-group">
                     <span> 당첨 번호: </span>
                     <span style={lottoFontStyle}>{winningNumber}</span>
-                    {bonusNumber}
+                    <span> + </span>
+                    <LottoNumber number={bonusNumber}/>
                 </div>
                 <div className="form-show-div form-group">
                     <LottoMachine className="margin-bottom" addLotto={this.setWinningNumber} btnSize="btn-sm"/>

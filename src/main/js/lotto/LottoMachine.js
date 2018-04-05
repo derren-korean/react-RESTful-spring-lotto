@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 
 const PARSING_SYMBOL = ",";
-const MiN_NUMBER = 1;
+const MIN_NUMBER = 1;
 const MAX_NUMBER = 45;
 
 const ENTER_KEY = 13;
@@ -80,7 +80,7 @@ class LottoMachine extends Component {
     }
 
     rangeCheck(numbers) {
-        return numbers.find((number)=>number < MiN_NUMBER || number > MAX_NUMBER);
+        return numbers.find((number)=>number < MIN_NUMBER || number > MAX_NUMBER);
     }
 
     hasSameNumber(numbers) {
