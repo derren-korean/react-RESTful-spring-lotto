@@ -13,9 +13,11 @@ class LottoSelector extends Component {
         this.state = {
             numbers: []
         };
+        this.openModal = this.openModal.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onNumberSelected = this.onNumberSelected.bind(this);
         this.initNumbers = this.initNumbers.bind(this);
+        this.isFull = this.isFull.bind(this);
     }
 
     componentDidMount() {
@@ -32,16 +34,19 @@ class LottoSelector extends Component {
         })
     }
 
+    openModal() {
+        if (this.props.disabled) return;
+        window.location = "#createLotto";
+    }
+
     handleSubmit(e) {
         e.preventDefault();
-        if (this.state.numbers.filter(LNumber=>LNumber.selected).length != MAX_LOTTO_NUMBER) {
+        if (!this.isFull()) {
             alert(MAX_LOTTO_NUMBER+"개 숫자를 선택해주세요.");
             return;
         }
-        this.props.onCreate(this.state.numbers);
-        this.setState({
-            numbers : []
-        });
+        this.props.onCreate(this.state.numbers.filter(LNumber=>LNumber.selected).map(LNumber=>LNumber.number));
+        this.initNumbers();
         window.location = "#";
     }
 
@@ -49,13 +54,17 @@ class LottoSelector extends Component {
         this.setState({
             numbers: this.changeSelectedInList(number)
         });
-        if (this.state.numbers.filter(LNumber=>LNumber.selected).length == MAX_LOTTO_NUMBER) {
+        if (this.isFull()) {
             this.setDisabled();
             return;
         }
         if (this.state.numbers.find(LNumber=>LNumber.disabled)) {
             this.setAble();
         }
+    }
+
+    isFull() {
+        return this.state.numbers.filter(LNumber=>LNumber.selected).length == MAX_LOTTO_NUMBER;
     }
 
     changeSelectedInList(number) {
@@ -97,9 +106,11 @@ class LottoSelector extends Component {
 
     render() {
         const selectedNumbers = this.getSelected();
+        let selectButton = "btn btn-primary ";
+        selectButton += this.props.btnSize ? this.props.btnSize : "btn-block";
         return (
-            <div>
-                <a href="#createLotto">번호 선택</a>
+            <div className="lottoSelector">
+                <div className={selectButton} onClick={this.openModal} disabled={this.props.disabled}>번호 선택</div>
 
                 <div id="createLotto" className="modalDialog">
                     <div>
@@ -108,7 +119,7 @@ class LottoSelector extends Component {
                             <h2>로또 번호 선택</h2>
                         </div>
                         <div className="margin-bottom">
-                            <spna className="fontSize">선택한 번호 : </spna>
+                            <span className="statusFont">선택한 번호 : </span>
                             {selectedNumbers.map((LNumber,index) =>
                                 <LottoNumber
                                     key={index}

@@ -1,7 +1,8 @@
 import React,{Component} from "react";
-import LottoMachine from "./LottoMachine";
+
 import BonusNumberMachine from "./BonusNumberMachine";
 import LottoNumber from "./LottoNumber";
+import LottoSelector from "./LottoSelector";
 
 const client = require('../client');
 const follow = require('../follow');
@@ -97,7 +98,7 @@ class WinningLottoGenerator extends Component {
                     <LottoNumber number={bonusNumber}/>
                 </div>
                 <div className="form-show-div form-group">
-                    <LottoMachine className="margin-bottom" addLotto={this.setWinningNumber} btnSize="btn-sm"/>
+                    <LottoSelector className="margin-bottom" onCreate={this.setWinningNumber} btnSize="btn-sm" />
                 </div>
                 <div className="form-show-div form-group">
                     <BonusNumberMachine lotto={this.state.winningNumber} addNumber={this.setBonusNumber} />

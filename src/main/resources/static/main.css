@@ -18,7 +18,7 @@ h1, h2, p, ul, li {
 }
 
 .table {
-    width: 200px;
+    width: 300px;
     margin: 0 auto;
     border-top: 1px solid #bbb;
 }
@@ -139,8 +139,11 @@ ul.header li a {
     border-radius : 50%;
     color : #fff;
     margin-right: 10px;
-    margin-bottom: 5px;
     text-align: center;
+}
+
+.lottoNumber.selectMode {
+    margin-bottom: 5px;
 }
 
 .lottoNumber.selectMode.selected {
@@ -172,6 +175,10 @@ ul.header li a {
 .lottoNumber.selectMode.disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+.lottoSelector .statusFont {
+    font-size: 18px;
 }
 
 /*Classes for creating dialogs*/

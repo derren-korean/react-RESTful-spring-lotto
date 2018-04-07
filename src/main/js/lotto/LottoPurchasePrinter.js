@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Lotto from "./Lotto";
 
 class LottoPurchasePrinter extends Component {
 
@@ -16,11 +17,11 @@ class LottoPurchasePrinter extends Component {
             <table className="table">
                 <tbody>
                 <tr>
-                    <th colSpan="2">수동 입력</th>
+                    <th colSpan="2" style={{textAlign: "center"}}>수동 입력</th>
                 </tr>
-                {this.props.list.map((number, index) =>
-                    <tr key={number.toString()+index}>
-                        <td>{number}</td><td onClick={this.onDeleteLotto} className="text-center delete-div" index={index}>X</td>
+                {this.props.list.map((numberList, index) =>
+                    <tr key={numberList.toString()+index}>
+                        <td style={{textAlign: "center"}}><Lotto numberList={numberList}/></td><td onClick={this.onDeleteLotto} className="text-center delete-div" index={index}>X</td>
                     </tr>
                 )}
                 </tbody>

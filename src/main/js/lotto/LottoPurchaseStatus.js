@@ -24,7 +24,7 @@ class LottoPurchaseStatus extends Component {
             <div className="form-show-div margin-bottom">
                 <table className="table">
                     <tbody>
-                        <tr>
+                        <tr style={{textAlign: "center"}}>
                             <td>자동 : </td><td>{this.props.count - this.props.lottoList.length}</td><td>수동 : </td><td>{this.props.lottoList.length}</td>
                         </tr>
                     </tbody>
