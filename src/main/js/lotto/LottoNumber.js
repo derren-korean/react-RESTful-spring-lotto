@@ -7,6 +7,12 @@ const COLOR_INDEX_ARR = [10,20,30,40,45];
 
 class LottoNumber extends Component {
 
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.getClassName = this.getClassName.bind(this);
+    }
+
     invalid(number) {
         if (!number || number.length == 0) return true;
         const _number = Number(number);
@@ -25,11 +31,34 @@ class LottoNumber extends Component {
         }
     }
 
+    handleSubmit(e) {
+        e.preventDefault();
+        if (this.props.onSelected) {
+            if (this.props.disabled) return;
+            this.props.onSelected(this.props.number);
+        }
+    }
+
+    getClassName() {
+        let className = "lottoNumber lottoNumberBelow" + this.getColor(this.props.number);
+        if (this.props.disabled) {
+            className += " disabled";
+        }
+        if (this.props.selected) {
+            className += " selected";
+        }
+        if (this.props.selectMode) {
+            className += " selectMode";
+        }
+        return className;
+    }
+
     render() {
         if (this.invalid(this.props.number)) return <span>?</span>;
-        const className = "lottoNumber lottoNumberBelow" + this.getColor(this.props.number);
+        const className = this.getClassName();
+
         return(
-            <span className={className}>
+            <span className={className} onClick={this.handleSubmit}>
                 {this.props.number}
             </span>
         )

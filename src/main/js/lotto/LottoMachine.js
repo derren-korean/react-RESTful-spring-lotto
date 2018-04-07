@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import LottoSelector from "./LottoSelector";
 
 const PARSING_SYMBOL = ",";
 const MIN_NUMBER = 1;
@@ -108,11 +109,7 @@ class LottoMachine extends Component {
         return (
             <div className="disable">
                 <span>예) 1,2,3,4,5,6(한 라인에 6개를 입력해주세요.) 숫자 범위 : 0~45</span>
-                <input value={this.state.numbers} disabled={this.props.disabled} type="text" name="numbers" className="form-control" placeholder="1,2,3,4,5,6"
-                       onChange={this.handleChange}
-                       onKeyDown={this.preventSubmit}
-                       />
-                <div onClick={this.createLotto} disabled={this.props.disabled} className={btnClassName} >로또 등록</div>
+                <LottoSelector />
             </div>
         )
     }

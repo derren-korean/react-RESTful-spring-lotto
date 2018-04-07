@@ -1,19 +1,44 @@
 import React, {Component} from "react";
 import LottoNumber from "./LottoNumber";
 
+const LOTTO_NUMBER_COUNT = 6;
+
 class Lotto extends Component {
 
+    invalid(list) {
+        if (!list || list == 0) return true;
+        if (list.length != LOTTO_NUMBER_COUNT) return true;
+        if (this.hasSameNumber(list)) return true;
+        return false;
+    }
+
+    hasSameNumber(list) {
+        while(list.length) {
+            if (this.contains(list, list.splice(0,1))) return true;
+        }
+        return false;
+    }
+
+    contains(list, number) {
+        var i = list.length;
+        while (i--) {
+            if (list[i] == number) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     render () {
-        if (!this.props.numberList || this.props.numberList.length == 0) return <span></span>;
+        if (this.invalid(this.props.numberList)) return <span></span>;
         return (
-            <div>
-                <LottoNumber number={this.props.numberList[0]}/>
-                <LottoNumber number={this.props.numberList[1]}/>
-                <LottoNumber number={this.props.numberList[2]}/>
-                <LottoNumber number={this.props.numberList[3]}/>
-                <LottoNumber number={this.props.numberList[4]}/>
-                <LottoNumber number={this.props.numberList[5]}/>
-            </div>
+            <span style={{marginRight: "5px"}}>
+                {this.props.numberList.map((_number,index)=>
+                    <LottoNumber
+                        key={_number.toString()+index}
+                        number={_number}/>
+                )}
+            </span>
         )
     }
 
