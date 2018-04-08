@@ -30,10 +30,10 @@ class Lotto extends Component {
     }
 
     render () {
-        if (this.invalid([...this.props.numberList])) return <span></span>;
+        if (this.invalid([...this.props.lotto])) return <span></span>;
         return (
             <span>
-                {this.props.numberList.map((_number,index)=>
+                {this.props.lotto.map((_number, index)=>
                     <LottoNumber
                         key={_number.toString()+index}
                         number={_number}/>

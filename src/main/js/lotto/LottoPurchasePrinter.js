@@ -21,7 +21,8 @@ class LottoPurchasePrinter extends Component {
                 </tr>
                 {this.props.list.map((numberList, index) =>
                     <tr key={numberList.toString()+index}>
-                        <td style={{textAlign: "center"}}><Lotto numberList={numberList}/></td><td onClick={this.onDeleteLotto} className="text-center delete-div" index={index}>X</td>
+                        <td style={{textAlign: "center"}}><Lotto lotto={numberList}/></td>
+                        <td onClick={this.onDeleteLotto} className="text-center delete-div" index={index}>X</td>
                     </tr>
                 )}
                 </tbody>

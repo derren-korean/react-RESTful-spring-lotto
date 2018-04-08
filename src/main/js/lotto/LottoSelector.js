@@ -4,8 +4,6 @@ import LottoNumber from "./LottoNumber";
 const LOTTO_NUMBER_START = 1;
 const LOTTO_NUMBER_END = 45;
 
-const MAX_LOTTO_NUMBER = 6;
-
 class LottoSelector extends Component {
 
     constructor(props) {
@@ -42,7 +40,7 @@ class LottoSelector extends Component {
     handleSubmit(e) {
         e.preventDefault();
         if (!this.isFull()) {
-            alert(MAX_LOTTO_NUMBER+"개 숫자를 선택해주세요.");
+            alert(this.props.maxLength+"개 숫자를 선택해주세요.");
             return;
         }
         this.props.onCreate(this.state.numbers.filter(LNumber=>LNumber.selected).map(LNumber=>LNumber.number));
@@ -64,7 +62,7 @@ class LottoSelector extends Component {
     }
 
     isFull() {
-        return this.state.numbers.filter(LNumber=>LNumber.selected).length == MAX_LOTTO_NUMBER;
+        return this.state.numbers.filter(LNumber=>LNumber.selected).length == this.props.maxLength;
     }
 
     changeSelectedInList(number) {

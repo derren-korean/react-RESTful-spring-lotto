@@ -3,6 +3,7 @@ import React,{Component} from "react";
 import BonusNumberMachine from "./BonusNumberMachine";
 import LottoNumber from "./LottoNumber";
 import LottoSelector from "./LottoSelector";
+import Lotto from "./Lotto";
 
 const client = require('../client');
 const follow = require('../follow');
@@ -44,7 +45,7 @@ class WinningLottoGenerator extends Component {
             }
             winningLotto = {};
         }
-        if (this.state.winningNumber.length && this.state.bonusNumber == "?") {
+        if (this.state.winningNumber.length && this.state.bonusNumber == []) {
             alert("행운 번호를 입력해주세요.");
             return;
         }
@@ -67,8 +68,8 @@ class WinningLottoGenerator extends Component {
             })
         }).done(()=>{
             self.setState({
-                winningLottoNumber: "",
-                bonusNumber: ""
+                winningLottoNumber: [],
+                bonusNumber: 0
             });
             this.props.onSubmit();
         })
@@ -88,20 +89,25 @@ class WinningLottoGenerator extends Component {
         };
         const winningNumber = this.state.winningNumber.length ? this.state.winningNumber : this.props.winningNumber;
         let bonusNumber = this.state.bonusNumber.length ? this.state.bonusNumber : this.props.bonusNumber;
-        // bonusNumber = bonusNumber.length ? <span style={lottoFontStyle}> + {bonusNumber} </span> : <span></span>;
+        bonusNumber = winningNumber.length ? <span> + <LottoNumber number={bonusNumber}/> </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">
                 <div style={lastNumber} className="form-show-div form-group">
                     <span> 당첨 번호: </span>
-                    <span style={lottoFontStyle}>{winningNumber}</span>
-                    <span> + </span>
-                    <LottoNumber number={bonusNumber}/>
+                    <Lotto lotto={winningNumber} />
+                    {bonusNumber}
                 </div>
                 <div className="form-show-div form-group">
-                    <LottoSelector className="margin-bottom" onCreate={this.setWinningNumber} btnSize="btn-sm" />
+                    <LottoSelector className="margin-bottom"
+                                   maxLength={6}
+                                   onCreate={this.setWinningNumber}
+                    />
                 </div>
                 <div className="form-show-div form-group">
-                    <BonusNumberMachine lotto={this.state.winningNumber} addNumber={this.setBonusNumber} />
+                    <BonusNumberMachine
+                        lotto={this.state.winningNumber}
+                        addNumber={this.setBonusNumber}
+                    />
                 </div>
                 <div className="submit-button">
                     <button type="submit" value="Submit" className="btn btn-lg btn-primary btn-block">결과 확인</button>

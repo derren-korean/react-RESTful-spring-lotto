@@ -18,7 +18,7 @@ h1, h2, p, ul, li {
 }
 
 .table {
-    width: 300px;
+    width: 280px;
     margin: 0 auto;
     border-top: 1px solid #bbb;
 }
@@ -52,7 +52,7 @@ h1, h2, p, ul, li {
 }
 
 .pre-scrollable {
-    width: 400px;
+    width: 300px;
     margin: 0 auto;
 }
 

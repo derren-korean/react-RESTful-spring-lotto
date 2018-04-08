@@ -29,8 +29,8 @@ class App extends React.Component {
             match: true,
             result: true,
             lottoList: [],
-            winningNumber: "",
-            bonusNumber: "",
+            winningNumber: [],
+            bonusNumber: 0,
             lottoRank: [],
             results: {},
             profit: "",
@@ -77,8 +77,8 @@ class App extends React.Component {
                     return;
                 }
                 this.setState({
-                    winningNumber: wlottoes.entity.lotto.map(number=>number.number).join(SPLIT_SYMBOL),
-                    bonusNumber: wlottoes.entity.luckyNumber.number.toString(),
+                    winningNumber: wlottoes.entity.lotto.map(number=>number.number),
+                    bonusNumber: wlottoes.entity.luckyNumber.number,
                 });
                 this.loadResult();
             });
@@ -172,14 +172,13 @@ class App extends React.Component {
                         <CustomNavLink goToLink={this.goToLink} disabled={this.state.result} to="/result" text="결과 확인" />
                     </ul>
                     <div className="content">
-                        <Route path="/buy"
-                               component={(props) => (
-                                   <Buy {...props}
-                                        root={root}
-                                        nextStep="match"
-                                        activeNextStep={this.activeNextStep}
-                                        loadFromServer={this.loadFromServer}
-                                    />
+                        <Route path="/buy" component={(props) => (
+                           <Buy {...props}
+                                root={root}
+                                nextStep="match"
+                                activeNextStep={this.activeNextStep}
+                                loadFromServer={this.loadFromServer}
+                            />
                        )}/>
                         <Route path="/match" component={(props) => (
                             <Match

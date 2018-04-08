@@ -19,7 +19,11 @@ class LottoGenerator extends Component{
         <div><span className="redColor">구매 금액을 추가하면 활성화 됩니다.</span></div> : <div></div>;
         return(
             <div>
-                <LottoSelector onCreate={this.createLotto} disabled={this.props.disabled}/>
+                <LottoSelector
+                    maxLength={6}
+                    disabled={this.props.disabled}
+                    onCreate={this.createLotto}
+                />
                 {showDisabled}
             </div>
         )
