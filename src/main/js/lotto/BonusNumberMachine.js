@@ -1,21 +1,11 @@
 import React, {Component} from "react";
 import LottoSelector from "./LottoSelector";
 
-const ENTER_KEY = 13;
-
-class BonusNumberMachine extends Component {
+class BonusNumberSelector extends Component {
 
     constructor(props) {
         super(props);
         this.addNumber = this.addNumber.bind(this);
-        this.preventSubmit = this.preventSubmit.bind(this);
-    }
-
-    preventSubmit(event) {
-        if (event.keyCode == ENTER_KEY) {
-            this.addNumber();
-            event.preventDefault();
-        }
     }
 
     addNumber(number) {
@@ -43,9 +33,13 @@ class BonusNumberMachine extends Component {
     }
 
     render() {
+        if(this.props.lotto.length == 0) {
+            return <div></div>
+        }
         return(
             <div>
                 <LottoSelector maxLength={1}
+                               buttonText="보너스 번호"
                                id="Number"
                                btnSize="btn-sm"
                                onCreate={this.addNumber}
@@ -56,4 +50,4 @@ class BonusNumberMachine extends Component {
 
 }
 
-export default BonusNumberMachine
+export default BonusNumberSelector

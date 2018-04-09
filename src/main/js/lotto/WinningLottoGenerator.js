@@ -26,7 +26,6 @@ class WinningLottoGenerator extends Component {
     setWinningNumber(number) {
         this.setState({
             winningNumber: number,
-            bonusNumber: 0
         });
     }
 
@@ -67,17 +66,18 @@ class WinningLottoGenerator extends Component {
                 headers: {'Content-Type': 'application/json'}
             })
         }).done(()=>{
-            self.setState({
-                winningLottoNumber: [],
-                bonusNumber: 0
-            });
+            self.setWinningNumber([]);
+            self.setBonusNumber(0);
             this.props.onSubmit();
         })
     }
 
     render() {
         const winningNumber = this.state.winningNumber.length ? this.state.winningNumber : this.props.winningNumber;
-        let bonusNumber = this.state.bonusNumber ? this.state.bonusNumber : this.props.bonusNumber;
+        let bonusNumber = this.props.bonusNumber;
+        if (this.state.winningNumber.length) {
+            bonusNumber = this.state.bonusNumber;
+        }
         bonusNumber = winningNumber.length ? <span> + <LottoNumber number={bonusNumber}/> </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">

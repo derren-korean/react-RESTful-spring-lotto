@@ -115,9 +115,10 @@ class LottoSelector extends Component {
     render() {
         let selectButton = "btn btn-primary ";
         selectButton += this.props.btnSize ? this.props.btnSize : "btn-block";
+        const buttonText = this.props.buttonText ? this.props.buttonText : "번호 선택";
         return (
             <div className="lottoSelector">
-                <div className={selectButton} onClick={this.openModal} disabled={this.props.disabled}>번호 선택</div>
+                <div className={selectButton} onClick={this.openModal} disabled={this.props.disabled}>{buttonText}</div>
 
                 <div id={this.getModalId()} className="modalDialog">
                     <div>
@@ -147,7 +148,7 @@ class LottoSelector extends Component {
                             )}
                         </div>
                         <div>
-                            <button className="btn btn-block" onClick={this.handleSubmit}>Create</button>
+                            <button className="btn btn-block" onClick={this.handleSubmit}>생성 하기</button>
                         </div>
                     </div>
                 </div>
