@@ -1,45 +1,22 @@
 import React, {Component} from "react";
+import LottoSelector from "./LottoSelector";
 
-const MIN_NUMBER = 1;
-const MAX_NUMBER = 45;
-const ENTER_KEY = 13;
-
-class BonusNumberMachine extends Component {
+class BonusNumberSelector extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {bonusNumber: ''};
-        this.handleChange = this.handleChange.bind(this);
         this.addNumber = this.addNumber.bind(this);
-        this.preventSubmit = this.preventSubmit.bind(this);
     }
 
-    preventSubmit(event) {
-        if (event.keyCode == ENTER_KEY) {
-            this.addNumber();
-            event.preventDefault();
+    addNumber(number) {
+        if (Array.isArray(number)) {
+            number = number[0];
         }
-    }
-
-    handleChange(event) {
-        this.setState({
-            bonusNumber: event.target.value
-        })
-    }
-
-    addNumber() {
-        if (this.invalid(this.state.bonusNumber)) return;
-        this.props.addNumber(this.state.bonusNumber);
-        this.setState({
-            bonusNumber: ""
-        })
+        if (this.invalid(number)) return;
+        this.props.addNumber(number);
     }
 
     invalid(value) {
-        if (value < MIN_NUMBER || value > MAX_NUMBER) {
-            alert("숫자 입력 가능 범위 : "+MIN_NUMBER +" ~ "+MAX_NUMBER);
-            return true;
-        }
         if (this.props.lotto.length == 0) {
             alert("당첨 번호를 먼저 입력해주세요.");
             return true;
@@ -52,25 +29,25 @@ class BonusNumberMachine extends Component {
     }
 
     hasNumber(value) {
-        return this.props.lotto.split(",").find(number => number == value);
+        return this.props.lotto.find(number => number == value);
     }
 
     render() {
-        const btnStyle = {
-            marginLeft: "1em",
-            marginBottom: "5px"
-        };
+        if(this.props.lotto.length == 0) {
+            return <div></div>
+        }
         return(
             <div>
-                <label>
-                    2등 보너스 볼:
-                    <input onChange={this.handleChange} onKeyDown={this.preventSubmit} type="text" value={this.state.bonusNumber} className="form-control" maxLength="2" />
-                </label>
-                <div onClick={this.addNumber} style={btnStyle} className="btn btn-primary btn-md">추가</div>
+                <LottoSelector maxLength={1}
+                               buttonText="보너스 번호"
+                               id="Number"
+                               btnSize="btn-sm"
+                               onCreate={this.addNumber}
+                />
             </div>
         )
     }
 
 }
 
-export default BonusNumberMachine
+export default BonusNumberSelector

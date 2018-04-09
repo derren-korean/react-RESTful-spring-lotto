@@ -1,6 +1,5 @@
-import LottoStore from './LottoStore';
-
 import React, {Component} from "react";
+import LottoStore from './LottoStore';
 
 class Buy extends Component {
     constructor(props) {

@@ -1,6 +1,9 @@
 import React,{Component} from "react";
-import LottoMachine from "./LottoMachine";
+
 import BonusNumberMachine from "./BonusNumberMachine";
+import LottoNumber from "./LottoNumber";
+import LottoSelector from "./LottoSelector";
+import Lotto from "./Lotto";
 
 const client = require('../client');
 const follow = require('../follow');
@@ -10,8 +13,8 @@ class WinningLottoGenerator extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            winningNumber: "",
-            bonusNumber:""
+            winningNumber: [],
+            bonusNumber:0
         };
         this.setWinningNumber = this.setWinningNumber.bind(this);
         this.setBonusNumber = this.setBonusNumber.bind(this);
@@ -23,7 +26,6 @@ class WinningLottoGenerator extends Component {
     setWinningNumber(number) {
         this.setState({
             winningNumber: number,
-            bonusNumber: "?"
         });
     }
 
@@ -42,7 +44,7 @@ class WinningLottoGenerator extends Component {
             }
             winningLotto = {};
         }
-        if (this.state.winningNumber.length && this.state.bonusNumber == "?") {
+        if (this.state.winningNumber.length && this.state.bonusNumber == 0) {
             alert("행운 번호를 입력해주세요.");
             return;
         }
@@ -50,8 +52,8 @@ class WinningLottoGenerator extends Component {
     }
 
     toLottoArray(numbers) {
-        if(numbers.indexOf(this.props.splitSymbol) < 1) return "";
-        return numbers.split(this.props.splitSymbol).map(_number=>Object({number:_number}));
+        if (numbers.length == 0) return;
+        return numbers.map(_number=>Object({number:_number}));
     }
 
     submitWinningLotto(lotto) {
@@ -64,41 +66,39 @@ class WinningLottoGenerator extends Component {
                 headers: {'Content-Type': 'application/json'}
             })
         }).done(()=>{
-            self.setState({
-                winningLottoNumber: "",
-                bonusNumber: ""
-            });
+            self.setWinningNumber([]);
+            self.setBonusNumber(0);
             this.props.onSubmit();
         })
     }
 
     render() {
-        const lottoFontStyle = {
-            fontWeight: 'bold',
-            fontSize: 'large'
-        };
-        const lastNumber = {
-            backgroundColor: "#eee",
-            borderRadius: "3px",
-            textAlign: "center",
-            border: "1px solid #ccc",
-            padding: "0.5em 0"
-        };
         const winningNumber = this.state.winningNumber.length ? this.state.winningNumber : this.props.winningNumber;
-        let bonusNumber = this.state.bonusNumber.length ? this.state.bonusNumber : this.props.bonusNumber;
-        bonusNumber = bonusNumber.length ? <span style={lottoFontStyle}> + {bonusNumber} </span> : <span></span>;
+        let bonusNumber = this.props.bonusNumber;
+        if (this.state.winningNumber.length) {
+            bonusNumber = this.state.bonusNumber;
+        }
+        bonusNumber = winningNumber.length ? <span> + <LottoNumber number={bonusNumber}/> </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">
-                <div style={lastNumber} className="form-show-div form-group">
-                    <span> 당첨 번호: </span>
-                    <span style={lottoFontStyle}>{winningNumber}</span>
-                    {bonusNumber}
+                <div className="form-show-div form-group winningLotto">
+                    <h4> 당첨 번호 </h4>
+                    <div>
+                        <Lotto lotto={winningNumber} />
+                        {bonusNumber}
+                    </div>
                 </div>
                 <div className="form-show-div form-group">
-                    <LottoMachine className="margin-bottom" addLotto={this.setWinningNumber} btnSize="btn-sm"/>
+                    <LottoSelector className="margin-bottom"
+                                   maxLength={6}
+                                   onCreate={this.setWinningNumber}
+                    />
                 </div>
                 <div className="form-show-div form-group">
-                    <BonusNumberMachine lotto={this.state.winningNumber} addNumber={this.setBonusNumber} />
+                    <BonusNumberMachine
+                        lotto={this.state.winningNumber}
+                        addNumber={this.setBonusNumber}
+                    />
                 </div>
                 <div className="submit-button">
                     <button type="submit" value="Submit" className="btn btn-lg btn-primary btn-block">결과 확인</button>

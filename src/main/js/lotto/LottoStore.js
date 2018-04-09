@@ -6,6 +6,8 @@ import LottoPurchaseStatus from "./LottoPurchaseStatus";
 const client = require('../client');
 const follow = require('../follow');
 
+const LOTTO_FORMAT= ",";
+
 class LottoStore extends Component {
     constructor(props) {
         super(props);
@@ -53,7 +55,7 @@ class LottoStore extends Component {
         event.preventDefault();
         let createCount = 0;
         this.state.manualLottoList.forEach(lotto=>{
-            this.onCreate(lotto, ++createCount);
+            this.onCreate(lotto.join(LOTTO_FORMAT), ++createCount);
         });
         let index = this.state.manualLottoList.length;
         for (index; index < this.state.totalCount; index++) {

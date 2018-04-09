@@ -18,7 +18,7 @@ h1, h2, p, ul, li {
 }
 
 .table {
-    width: 200px;
+    width: 280px;
     margin: 0 auto;
     border-top: 1px solid #bbb;
 }
@@ -52,7 +52,7 @@ h1, h2, p, ul, li {
 }
 
 .pre-scrollable {
-    width: 400px;
+    width: 300px;
     margin: 0 auto;
 }
 
@@ -104,11 +104,6 @@ ul.header li a {
     transition: opacity 250ms ease-in;
 }
 
-.disable [disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
 .margin-bottom {
     margin-bottom: 1em;
 }
@@ -130,3 +125,121 @@ ul.header li a {
     border-color: #204d74;
     cursor: pointer;
 }
+
+.lottoNumber.selectMode:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.lottoNumber {
+    display : inline-block;
+    width : 26px;
+    height : 26px;
+    padding-top : 3px;
+    border-radius : 50%;
+    color : #fff;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.lottoNumber.selectMode {
+    margin-bottom: 5px;
+}
+
+.lottoNumber.selectMode.selected {
+    border: 2px solid #000000;
+    padding-top: 0;
+}
+
+.lottoNumberBelow10 {
+    background-image: -webkit-linear-gradient(top, #fbb52e 0, #d6971d 100%);
+}
+
+.lottoNumberBelow20 {
+    background-image: -webkit-linear-gradient(top, #2e7dd6 0, #215c9e 100%);
+}
+
+.lottoNumberBelow30 {
+    background-image: -webkit-linear-gradient(top, #f83622 0, #bb2a1b 100%);
+}
+
+.lottoNumberBelow40 {
+    background-image: -webkit-linear-gradient(top, #6f7070 0, #4b4c4c 100%);
+}
+
+.lottoNumberBelow45 {
+    background-image: -webkit-linear-gradient(top, #51b00d 0, #387909 100%);
+}
+
+.disable [disabled],
+.lottoNumber.selectMode.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.lottoSelector .statusFont {
+    font-size: 18px;
+}
+
+.winningLotto {
+    background-color: #eeeeee;
+    border-radius: 3px;
+    text-align: center;
+    border: 1px solid #cccccc;
+    padding: 0.5em 0;
+}
+
+/*Classes for creating dialogs*/
+
+.modalDialog {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+
+.modalDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+
+.modalDialog > div {
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 10px;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+}
+
+.close {
+    background: #606061;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: 5px;
+    text-align: center;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #00d9ff; }
