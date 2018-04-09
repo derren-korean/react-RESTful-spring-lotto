@@ -181,6 +181,14 @@ ul.header li a {
     font-size: 18px;
 }
 
+.winningLotto {
+    background-color: #eeeeee;
+    border-radius: 3px;
+    text-align: center;
+    border: 1px solid #cccccc;
+    padding: 0.5em 0;
+}
+
 /*Classes for creating dialogs*/
 
 .modalDialog {

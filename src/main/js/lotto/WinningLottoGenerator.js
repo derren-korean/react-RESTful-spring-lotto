@@ -13,8 +13,8 @@ class WinningLottoGenerator extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            winningNumber: "",
-            bonusNumber:""
+            winningNumber: [],
+            bonusNumber:0
         };
         this.setWinningNumber = this.setWinningNumber.bind(this);
         this.setBonusNumber = this.setBonusNumber.bind(this);
@@ -26,7 +26,7 @@ class WinningLottoGenerator extends Component {
     setWinningNumber(number) {
         this.setState({
             winningNumber: number,
-            bonusNumber: "?"
+            bonusNumber: 0
         });
     }
 
@@ -45,7 +45,7 @@ class WinningLottoGenerator extends Component {
             }
             winningLotto = {};
         }
-        if (this.state.winningNumber.length && this.state.bonusNumber == []) {
+        if (this.state.winningNumber.length && this.state.bonusNumber == 0) {
             alert("행운 번호를 입력해주세요.");
             return;
         }
@@ -53,8 +53,8 @@ class WinningLottoGenerator extends Component {
     }
 
     toLottoArray(numbers) {
-        if(numbers.indexOf(this.props.splitSymbol) < 1) return "";
-        return numbers.split(this.props.splitSymbol).map(_number=>Object({number:_number}));
+        if (numbers.length == 0) return;
+        return numbers.map(_number=>Object({number:_number}));
     }
 
     submitWinningLotto(lotto) {
@@ -76,26 +76,17 @@ class WinningLottoGenerator extends Component {
     }
 
     render() {
-        const lottoFontStyle = {
-            fontWeight: 'bold',
-            fontSize: 'large'
-        };
-        const lastNumber = {
-            backgroundColor: "#eee",
-            borderRadius: "3px",
-            textAlign: "center",
-            border: "1px solid #ccc",
-            padding: "0.5em 0"
-        };
         const winningNumber = this.state.winningNumber.length ? this.state.winningNumber : this.props.winningNumber;
-        let bonusNumber = this.state.bonusNumber.length ? this.state.bonusNumber : this.props.bonusNumber;
+        let bonusNumber = this.state.bonusNumber ? this.state.bonusNumber : this.props.bonusNumber;
         bonusNumber = winningNumber.length ? <span> + <LottoNumber number={bonusNumber}/> </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">
-                <div style={lastNumber} className="form-show-div form-group">
-                    <span> 당첨 번호: </span>
-                    <Lotto lotto={winningNumber} />
-                    {bonusNumber}
+                <div className="form-show-div form-group winningLotto">
+                    <h4> 당첨 번호 </h4>
+                    <div>
+                        <Lotto lotto={winningNumber} />
+                        {bonusNumber}
+                    </div>
                 </div>
                 <div className="form-show-div form-group">
                     <LottoSelector className="margin-bottom"

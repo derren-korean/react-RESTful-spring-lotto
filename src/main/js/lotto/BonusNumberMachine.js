@@ -7,8 +7,6 @@ class BonusNumberMachine extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {bonusNumber: ''};
-        this.handleChange = this.handleChange.bind(this);
         this.addNumber = this.addNumber.bind(this);
         this.preventSubmit = this.preventSubmit.bind(this);
     }
@@ -20,18 +18,12 @@ class BonusNumberMachine extends Component {
         }
     }
 
-    handleChange(event) {
-        this.setState({
-            bonusNumber: event.target.value
-        })
-    }
-
-    addNumber() {
-        if (this.invalid(this.state.bonusNumber)) return;
-        this.props.addNumber(this.state.bonusNumber);
-        this.setState({
-            bonusNumber: ""
-        })
+    addNumber(number) {
+        if (Array.isArray(number)) {
+            number = number[0];
+        }
+        if (this.invalid(number)) return;
+        this.props.addNumber(number);
     }
 
     invalid(value) {
@@ -54,6 +46,7 @@ class BonusNumberMachine extends Component {
         return(
             <div>
                 <LottoSelector maxLength={1}
+                               id="Number"
                                btnSize="btn-sm"
                                onCreate={this.addNumber}
                 />
