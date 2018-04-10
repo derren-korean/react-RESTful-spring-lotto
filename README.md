@@ -42,5 +42,5 @@ curl "localhost:8080/result"
 ## todo list
 
 * client - 로또 번호 판으로 변경.
-  * esc, enter, 방향키, 스페이스 작동하도록.
+  * esc, enter, 방향키, 스페이스 작동하도록. OK - need refactoring
   * 로또 좌우간격 동일하게.

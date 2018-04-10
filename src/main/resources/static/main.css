@@ -189,6 +189,12 @@ ul.header li a {
     padding: 0.5em 0;
 }
 
+div.modalButton {
+    font-family: inherit;
+    background-color: buttonface;
+    cursor: pointer;
+}
+
 /*Classes for creating dialogs*/
 
 .modalDialog {
