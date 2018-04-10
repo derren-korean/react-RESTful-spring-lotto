@@ -56,9 +56,10 @@ class LottoNumber extends Component {
     render() {
         if (this.invalid(this.props.number)) return <span>?</span>;
         const className = this.getClassName();
+        const tabIndex = this.props.tabIndex ? this.props.tabIndex : "";
 
         return(
-            <span className={className} onClick={this.handleSubmit}>
+            <span className={className} onClick={this.handleSubmit} tabIndex={tabIndex}>
                 {this.props.number}
             </span>
         )

@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import LottoNumber from "./LottoNumber";
 
-const LOTTO_NUMBER_START = 1;
-const LOTTO_NUMBER_END = 45;
+const LOTTO_NUMBER_START = 1; // tabIndex에서 참고하고 있음.
+const LOTTO_NUMBER_END = 45; // tabIndex에서 참고하고 있음.
 
 class LottoSelector extends Component {
 
@@ -18,10 +18,20 @@ class LottoSelector extends Component {
         this.isFull = this.isFull.bind(this);
         this.getModalId = this.getModalId.bind(this);
         this.getMaxLength = this.getMaxLength.bind(this);
+        this.keyUpHandle = this.keyUpHandle.bind(this);
+        this.isModalDisplay = this.isModalDisplay.bind(this);
+    }
+
+    componentWillMount() {
+        document.body.addEventListener('keyup', this.keyUpHandle, false);
     }
 
     componentDidMount() {
         this.initNumbers();
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener('keyup', this.keyUpHandle, false);
     }
 
     initNumbers() {
@@ -45,6 +55,46 @@ class LottoSelector extends Component {
 
     getMaxLength() {
         return this.props.maxLength ? this.props.maxLength : 6;
+    }
+
+    isModalDisplay() {
+        return window.location.hash == "#" + this.getModalId();
+    }
+
+    keyUpHandle(event) {
+        if (!this.isModalDisplay()) return;
+        if (event.target.tabIndex < LOTTO_NUMBER_START) return;
+
+        if (event.key === 'Enter') {
+            this.handleSubmit(event);
+        }
+
+        if (event.key === 'Escape') {
+            window.location = "#";
+        }
+
+        if (event.key === ' ') {
+            console.log(event.key);
+        }
+
+        if (event.key.startsWith('Arrow')) {
+            this.moveFocus(event.key);
+        }
+    }
+
+    moveFocus(keyEvent) {
+        if (keyEvent === 'ArrowUp') {
+            console.log(keyEvent);
+        }
+        if (keyEvent === 'ArrowDown') {
+            console.log(keyEvent);
+        }
+        if (keyEvent === 'ArrowLeft') {
+            console.log(keyEvent);
+        }
+        if (keyEvent === 'ArrowRight') {
+            console.log(keyEvent);
+        }
     }
 
     handleSubmit(e) {
@@ -123,7 +173,7 @@ class LottoSelector extends Component {
                 <div id={this.getModalId()} className="modalDialog">
                     <div>
                         <div className="margin-bottom">
-                            <a href="#" title="Close" className="close">X</a>
+                            <a href="#" title="Close" className="close" tabIndex={LOTTO_NUMBER_START}>X</a>
                             <h2>로또 번호 선택</h2>
                         </div>
                         <div className="margin-bottom">
@@ -137,18 +187,18 @@ class LottoSelector extends Component {
                         </div>
                         <div className="margin-bottom">
                             {this.state.numbers.map((LNumber, index)=>
-                                <LottoNumber
-                                    key={index}
-                                    number={LNumber.number}
-                                    onSelected={this.onNumberSelected}
-                                    selectMode={true}
-                                    selected={LNumber.selected}
-                                    disabled={LNumber.disabled}
+                                <LottoNumber key={index}
+                                             tabIndex={1+index+LOTTO_NUMBER_START}
+                                             number={LNumber.number}
+                                             selectMode={true}
+                                             onSelected={this.onNumberSelected}
+                                             selected={LNumber.selected}
+                                             disabled={LNumber.disabled}
                                 />
                             )}
                         </div>
                         <div>
-                            <button className="btn btn-block" onClick={this.handleSubmit}>생성 하기</button>
+                            <button className="btn btn-block" onClick={this.handleSubmit} tabIndex={2+LOTTO_NUMBER_START+LOTTO_NUMBER_END}>생성 하기</button>
                         </div>
                     </div>
                 </div>
