@@ -29,19 +29,34 @@ class Lotto extends Component {
         return false;
     }
 
+    getListRender() {
+        return this.props.lotto.map((_number, index)=> {
+            if (index == this.props.lotto.length-1) {
+                return (
+                    <LottoNumber
+                        key={_number.toString()+index}
+                        number={_number}
+                        lastNumber={true}
+                    />
+                )
+            }
+            return (
+                <LottoNumber
+                    key={_number.toString()+index}
+                    number={_number}
+                />
+            )
+        });
+    }
+
     render () {
         if (this.invalid([...this.props.lotto])) return <span></span>;
         return (
             <span>
-                {this.props.lotto.map((_number, index)=>
-                    <LottoNumber
-                        key={_number.toString()+index}
-                        number={_number}/>
-                )}
+                {this.getListRender()}
             </span>
         )
     }
-
 }
 
 export default Lotto

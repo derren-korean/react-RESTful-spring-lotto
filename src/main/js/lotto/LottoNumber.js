@@ -10,7 +10,7 @@ class LottoNumber extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.getClassName = this.getClassName.bind(this);
+        this.addClassName = this.addClassName.bind(this);
     }
 
     invalid(number) {
@@ -39,23 +39,32 @@ class LottoNumber extends Component {
         }
     }
 
-    getClassName() {
-        let className = "lottoNumber lottoNumberBelow" + this.getColor(this.props.number);
+    addClassName(className) {
         if (this.props.disabled) {
             className += " disabled";
         }
         if (this.props.selected) {
             className += " selected";
         }
-        if (this.props.selectMode) {
-            className += " selectMode";
-        }
-        return className;
+        return className + " selectMode";
+    }
+
+    selectModeRender(className) {
+        className = this.addClassName(className);
+        return (
+            <span className={className} onClick={this.handleSubmit} tabIndex={this.props.tabIndex}>
+                {this.props.number}
+            </span>
+        )
     }
 
     render() {
         if (this.invalid(this.props.number)) return <span>?</span>;
-        const className = this.getClassName();
+        const noMarginRight = this.props.lastNumber ? " noMarginRight" : "";
+        const className = "lottoNumber lottoNumberBelow" + this.getColor(this.props.number) + noMarginRight;
+        if (this.props.selectMode) {
+            return this.selectModeRender(className);
+        }
 
         return(
             <span className={className} onClick={this.handleSubmit}>

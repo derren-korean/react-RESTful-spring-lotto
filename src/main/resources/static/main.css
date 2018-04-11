@@ -177,6 +177,10 @@ ul.header li a {
     cursor: not-allowed;
 }
 
+.lottoNumber.noMarginRight {
+    margin-right: 0;
+}
+
 .lottoSelector .statusFont {
     font-size: 18px;
 }
@@ -187,6 +191,12 @@ ul.header li a {
     text-align: center;
     border: 1px solid #cccccc;
     padding: 0.5em 0;
+}
+
+div.modalButton {
+    font-family: inherit;
+    background-color: buttonface;
+    cursor: pointer;
 }
 
 /*Classes for creating dialogs*/

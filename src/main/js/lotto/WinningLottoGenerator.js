@@ -78,7 +78,7 @@ class WinningLottoGenerator extends Component {
         if (this.state.winningNumber.length) {
             bonusNumber = this.state.bonusNumber;
         }
-        bonusNumber = winningNumber.length ? <span> + <LottoNumber number={bonusNumber}/> </span> : <span></span>;
+        bonusNumber = winningNumber.length ? <span> + <LottoNumber number={bonusNumber} lastNumber={true}/> </span> : <span></span>;
         return(
             <form onSubmit={this.handleSubmit} className="form-show">
                 <div className="form-show-div form-group winningLotto">

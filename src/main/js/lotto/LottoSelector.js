@@ -1,8 +1,15 @@
 import React, {Component} from "react";
 import LottoNumber from "./LottoNumber";
+import LottoSelectPanel from "./LottoSelectPanel";
 
-const LOTTO_NUMBER_START = 1;
-const LOTTO_NUMBER_END = 45;
+const DEFAULT_ID = "createLotto";
+const DEFAULT_MAX_LENGTH = 6;
+
+const LOTTO_NUMBER_START = 1; // tabIndex에서 참고하고 있음.
+const LOTTO_NUMBER_END = 45; // tabIndex에서 참고하고 있음.
+
+const LOTTO_NUMBER_TABINDEX_OFFSET = 1;
+const CREATE_BUTTON_TAB_INDEX = 2 + LOTTO_NUMBER_START+LOTTO_NUMBER_END;
 
 class LottoSelector extends Component {
 
@@ -35,7 +42,7 @@ class LottoSelector extends Component {
     }
 
     getModalId() {
-        return this.props.id ? "createLotto" + this.props.id : "createLotto";
+        return this.props.id ? DEFAULT_ID + this.props.id : DEFAULT_ID;
     }
 
     openModal() {
@@ -44,7 +51,7 @@ class LottoSelector extends Component {
     }
 
     getMaxLength() {
-        return this.props.maxLength ? this.props.maxLength : 6;
+        return this.props.maxLength ? this.props.maxLength : DEFAULT_MAX_LENGTH;
     }
 
     handleSubmit(e) {
@@ -53,7 +60,7 @@ class LottoSelector extends Component {
             alert(this.getMaxLength()+"개 숫자를 선택해주세요.");
             return;
         }
-        this.props.onCreate(this.state.numbers.filter(LNumber=>LNumber.selected).map(LNumber=>LNumber.number))
+        this.props.onCreate(this.state.numbers.filter(LNumber=>LNumber.selected).map(LNumber=>LNumber.number));
         this.initNumbers();
         window.location = "#";
     }
@@ -90,7 +97,7 @@ class LottoSelector extends Component {
         });
         this.setState({
             numbers: numbers
-        })
+        });
     }
 
     setAble() {
@@ -100,11 +107,11 @@ class LottoSelector extends Component {
         });
         this.setState({
             numbers: numbers
-        })
+        });
     }
 
     createNumber(number, selected, disabled) {
-        return {number: number, selected: selected, disabled: disabled}
+        return {number: number, selected: selected, disabled: disabled};
     }
 
     getSelected() {
@@ -123,7 +130,7 @@ class LottoSelector extends Component {
                 <div id={this.getModalId()} className="modalDialog">
                     <div>
                         <div className="margin-bottom">
-                            <a href="#" title="Close" className="close">X</a>
+                            <a href="#" title="Close" className="close" tabIndex={LOTTO_NUMBER_START}>X</a>
                             <h2>로또 번호 선택</h2>
                         </div>
                         <div className="margin-bottom">
@@ -136,19 +143,19 @@ class LottoSelector extends Component {
                             )}
                         </div>
                         <div className="margin-bottom">
-                            {this.state.numbers.map((LNumber, index)=>
-                                <LottoNumber
-                                    key={index}
-                                    number={LNumber.number}
-                                    onSelected={this.onNumberSelected}
-                                    selectMode={true}
-                                    selected={LNumber.selected}
-                                    disabled={LNumber.disabled}
-                                />
-                            )}
+                            <LottoSelectPanel
+                                numbers={this.state.numbers}
+                                startNumber={LOTTO_NUMBER_START}
+                                endNumber={LOTTO_NUMBER_END}
+                                indexOffset={LOTTO_NUMBER_TABINDEX_OFFSET}
+                                buttonIndex={CREATE_BUTTON_TAB_INDEX}
+                                modalId={this.getModalId()}
+                                onNumberSelected={this.onNumberSelected}
+                                handleSubmit={this.handleSubmit}
+                            />
                         </div>
                         <div>
-                            <button className="btn btn-block" onClick={this.handleSubmit}>생성 하기</button>
+                            <div className="btn btn-block modalButton" onClick={this.handleSubmit} tabIndex={CREATE_BUTTON_TAB_INDEX}>생성 하기</div>
                         </div>
                     </div>
                 </div>

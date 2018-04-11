@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ResultPrinter from "./resultPrinter";
+import ResultPrinter from "./ResultPrinter";
 
 class Result extends Component {
     constructor(props) {

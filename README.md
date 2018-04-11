@@ -38,9 +38,3 @@ curl "localhost:8080/lottoRank"
 
 * 결과 확인 (*로또와 담청 번호 생성이 되어 있어야 함.)
 curl "localhost:8080/result"
-
-## todo list
-
-* client - 로또 번호 판으로 변경.
-  * esc, enter, 방향키, 스페이스 작동하도록.
-  * 로또 좌우간격 동일하게.
