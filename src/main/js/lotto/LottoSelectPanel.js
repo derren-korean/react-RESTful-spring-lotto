@@ -116,20 +116,35 @@ class LottoSelectPanel extends Component {
         document.getElementById(this.props.modalId).getElementsByClassName('selectMode')[index].focus();
     }
 
+    getListRender() {
+        return this.props.numbers.map((LNumber, index)=> {
+            if (LNumber.number % COLUMN_COUNT_OF_LOTTO_NUMBER == 0) {
+                return <LottoNumber key={index}
+                                    number={LNumber.number}
+                                    lastNumber={true}
+                                    tabIndex={this.props.indexOffset + index + this.props.startNumber} //start
+                                    selectMode={true}
+                                    onSelected={this.props.onNumberSelected}
+                                    selected={LNumber.selected}
+                                    disabled={LNumber.disabled}
+                />
+            }
+            return <LottoNumber key={index}
+                                number={LNumber.number}
+                                tabIndex={this.props.indexOffset + index + this.props.startNumber} //start
+                                selectMode={true}
+                                onSelected={this.props.onNumberSelected}
+                                selected={LNumber.selected}
+                                disabled={LNumber.disabled}
+            />
+        })
+    }
+
     render() {
         if (this.props.numbers.length == 0) return <div></div>;
         return(
             <div>
-            {this.props.numbers.map((LNumber, index)=>
-                <LottoNumber key={index}
-                             tabIndex={this.props.indexOffset+index+this.props.startNumber} //start
-                             number={LNumber.number}
-                             selectMode={true}
-                             onSelected={this.props.onNumberSelected}
-                             selected={LNumber.selected}
-                             disabled={LNumber.disabled}
-                />
-            )}
+                {this.getListRender()}
             </div>
         )
     }

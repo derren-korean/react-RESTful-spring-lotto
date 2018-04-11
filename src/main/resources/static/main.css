@@ -177,6 +177,10 @@ ul.header li a {
     cursor: not-allowed;
 }
 
+.lottoNumber.noMarginRight {
+    margin-right: 0;
+}
+
 .lottoSelector .statusFont {
     font-size: 18px;
 }
